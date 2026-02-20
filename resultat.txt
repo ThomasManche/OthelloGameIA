@@ -1,0 +1,289 @@
+Jeu d'Othello - Résultats 
+0,0,1,1,1,1 pour le tour N
+Coup joué :60
+Score du joueur B : 41
+Score du joueur N : 23
+0,0,1,2,1,1 pour le tour N
+Coup joué :60
+Score du joueur B : 26
+Score du joueur N : 38
+0,0,2,1,1,1 pour le tour N
+Coup joué :15
+Score du joueur B : 0
+Score du joueur N : 64
+0,0,2,2,1,1 pour le tour N
+Coup joué :60
+Score du joueur B : 27
+Score du joueur N : 37
+0,1,1,1,1,1 pour le tour N
+Coup joué :60
+Score du joueur B : 51
+Score du joueur N : 13
+0,1,1,1,1,2 pour le tour N
+Coup joué :60
+Score du joueur B : 29
+Score du joueur N : 35
+0,1,1,2,1,1 pour le tour N
+Coup joué :60
+Score du joueur B : 16
+Score du joueur N : 48
+0,1,1,2,1,2 pour le tour N
+Coup joué :60
+Score du joueur B : 7
+Score du joueur N : 57
+0,1,2,1,1,1 pour le tour N
+Coup joué :15
+Score du joueur B : 0
+Score du joueur N : 64
+0,1,2,1,1,2 pour le tour N
+Coup joué :60
+Score du joueur B : 47
+Score du joueur N : 17
+0,1,2,2,1,1 pour le tour N
+Coup joué :60
+Score du joueur B : 38
+Score du joueur N : 26
+0,1,2,2,1,2 pour le tour N
+Coup joué :60
+Score du joueur B : 17
+Score du joueur N : 47
+1,0,1,1,1,1 pour le tour N
+Coup joué :60
+Score du joueur B : 40
+Score du joueur N : 24
+1,0,1,1,2,1 pour le tour N
+Coup joué :60
+Score du joueur B : 30
+Score du joueur N : 34
+1,0,1,2,1,1 pour le tour N
+Coup joué :60
+Score du joueur B : 20
+Score du joueur N : 44
+1,0,1,2,2,1 pour le tour N
+Coup joué :60
+Score du joueur B : 20
+Score du joueur N : 44
+1,0,2,1,1,1 pour le tour N
+Coup joué :60
+Score du joueur B : 35
+Score du joueur N : 29
+1,0,2,1,2,1 pour le tour N
+Coup joué :60
+Score du joueur B : 52
+Score du joueur N : 12
+1,0,2,2,1,1 pour le tour N
+Coup joué :60
+Score du joueur B : 45
+Score du joueur N : 19
+1,0,2,2,2,1 pour le tour N
+Coup joué :60
+Score du joueur B : 36
+Score du joueur N : 28
+1,1,1,1,1,1 pour le tour N
+Coup joué :60
+Score du joueur B : 45
+Score du joueur N : 19
+1,1,1,1,1,2 pour le tour N
+Coup joué :60
+Score du joueur B : 35
+Score du joueur N : 29
+1,1,1,1,2,1 pour le tour N
+Coup joué :56
+Score du joueur B : 64
+Score du joueur N : 0
+1,1,1,1,2,2 pour le tour N
+Coup joué :60
+Score du joueur B : 30
+Score du joueur N : 34
+1,1,1,2,1,1 pour le tour N
+Coup joué :60
+Score du joueur B : 16
+Score du joueur N : 48
+1,1,1,2,1,2 pour le tour N
+Coup joué :60
+Score du joueur B : 2
+Score du joueur N : 62
+1,1,1,2,2,1 pour le tour N
+Coup joué :60
+Score du joueur B : 33
+Score du joueur N : 31
+1,1,1,2,2,2 pour le tour N
+Coup joué :60
+Score du joueur B : 22
+Score du joueur N : 42
+1,1,2,1,1,1 pour le tour N
+Coup joué :60
+Score du joueur B : 35
+Score du joueur N : 29
+1,1,2,1,1,2 pour le tour N
+Coup joué :60
+Score du joueur B : 49
+Score du joueur N : 15
+1,1,2,1,2,1 pour le tour N
+Coup joué :9
+Score du joueur B : 0
+Score du joueur N : 64
+1,1,2,1,2,2 pour le tour N
+Coup joué :60
+Score du joueur B : 35
+Score du joueur N : 29
+1,1,2,2,1,1 pour le tour N
+Coup joué :60
+Score du joueur B : 40
+Score du joueur N : 24
+1,1,2,2,1,2 pour le tour N
+Coup joué :60
+Score du joueur B : 33
+Score du joueur N : 31
+1,1,2,2,2,1 pour le tour N
+Coup joué :60
+Score du joueur B : 38
+Score du joueur N : 26
+1,1,2,2,2,2 pour le tour N
+Coup joué :60
+Score du joueur B : 19
+Score du joueur N : 45
+0,0,1,1,1,1 pour le tour B
+Coup joué :60
+Score du joueur B : 29
+Score du joueur N : 35
+0,0,1,2,1,1 pour le tour B
+Coup joué :60
+Score du joueur B : 20
+Score du joueur N : 44
+0,0,2,1,1,1 pour le tour B
+Coup joué :60
+Score du joueur B : 33
+Score du joueur N : 31
+0,0,2,2,1,1 pour le tour B
+Coup joué :60
+Score du joueur B : 27
+Score du joueur N : 37
+0,1,1,1,1,1 pour le tour B
+Coup joué :60
+Score du joueur B : 31
+Score du joueur N : 33
+0,1,1,1,1,2 pour le tour B
+Coup joué :60
+Score du joueur B : 43
+Score du joueur N : 21
+0,1,1,2,1,1 pour le tour B
+Coup joué :60
+Score du joueur B : 22
+Score du joueur N : 42
+0,1,1,2,1,2 pour le tour B
+Coup joué :9
+Score du joueur B : 64
+Score du joueur N : 0
+0,1,2,1,1,1 pour le tour B
+Coup joué :60
+Score du joueur B : 33
+Score du joueur N : 31
+0,1,2,1,1,2 pour le tour B
+Coup joué :60
+Score du joueur B : 28
+Score du joueur N : 36
+0,1,2,2,1,1 pour le tour B
+Coup joué :60
+Score du joueur B : 15
+Score du joueur N : 49
+0,1,2,2,1,2 pour le tour B
+Coup joué :60
+Score du joueur B : 19
+Score du joueur N : 45
+1,0,1,1,1,1 pour le tour B
+Coup joué :60
+Score du joueur B : 25
+Score du joueur N : 39
+1,0,1,1,2,1 pour le tour B
+Coup joué :60
+Score du joueur B : 34
+Score du joueur N : 30
+1,0,1,2,1,1 pour le tour B
+Coup joué :60
+Score du joueur B : 24
+Score du joueur N : 40
+1,0,1,2,2,1 pour le tour B
+Coup joué :60
+Score du joueur B : 10
+Score du joueur N : 54
+1,0,2,1,1,1 pour le tour B
+Coup joué :60
+Score du joueur B : 36
+Score du joueur N : 28
+1,0,2,1,2,1 pour le tour B
+Coup joué :60
+Score du joueur B : 43
+Score du joueur N : 21
+1,0,2,2,1,1 pour le tour B
+Coup joué :60
+Score du joueur B : 28
+Score du joueur N : 36
+1,0,2,2,2,1 pour le tour B
+Coup joué :60
+Score du joueur B : 39
+Score du joueur N : 25
+1,1,1,1,1,1 pour le tour B
+Coup joué :60
+Score du joueur B : 25
+Score du joueur N : 39
+1,1,1,1,1,2 pour le tour B
+Coup joué :60
+Score du joueur B : 43
+Score du joueur N : 21
+1,1,1,1,2,1 pour le tour B
+Coup joué :60
+Score du joueur B : 34
+Score du joueur N : 30
+1,1,1,1,2,2 pour le tour B
+Coup joué :60
+Score du joueur B : 49
+Score du joueur N : 15
+1,1,1,2,1,1 pour le tour B
+Coup joué :21
+Score du joueur B : 64
+Score du joueur N : 0
+1,1,1,2,1,2 pour le tour B
+Coup joué :9
+Score du joueur B : 64
+Score du joueur N : 0
+1,1,1,2,2,1 pour le tour B
+Coup joué :60
+Score du joueur B : 24
+Score du joueur N : 40
+1,1,1,2,2,2 pour le tour B
+Coup joué :60
+Score du joueur B : 15
+Score du joueur N : 49
+1,1,2,1,1,1 pour le tour B
+Coup joué :60
+Score du joueur B : 36
+Score du joueur N : 28
+1,1,2,1,1,2 pour le tour B
+Coup joué :60
+Score du joueur B : 28
+Score du joueur N : 36
+1,1,2,1,2,1 pour le tour B
+Coup joué :60
+Score du joueur B : 31
+Score du joueur N : 33
+1,1,2,1,2,2 pour le tour B
+Coup joué :60
+Score du joueur B : 46
+Score du joueur N : 18
+1,1,2,2,1,1 pour le tour B
+Coup joué :60
+Score du joueur B : 36
+Score du joueur N : 28
+1,1,2,2,1,2 pour le tour B
+Coup joué :60
+Score du joueur B : 42
+Score du joueur N : 22
+1,1,2,2,2,1 pour le tour B
+Coup joué :60
+Score du joueur B : 28
+Score du joueur N : 36
+1,1,2,2,2,2 pour le tour B
+Coup joué :60
+Score du joueur B : 43
+Score du joueur N : 21

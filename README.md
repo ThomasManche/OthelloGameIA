@@ -1,6 +1,6 @@
 # TP de programmation du jeu d'Othello
 ## Made by : Lavoisier Léandre & Thomas Manche
-## Students of INSA Hauts-de-France - Project for the class " Fondements de l'IA "
+###  Students of INSA Hauts-de-France - Project for the class " Fondements de l'IA "
 
 ## Currently available through this code :
 

@@ -1292,3 +1292,358 @@ Poids des cases(B) VS (N) Poids des cases
 Temps pour Montecarlo : 0.5
 Profondeur Noir (2 demi-coups) : 2
 N commence.
+Coup joué :60
+Score du joueur B : 31
+Score du joueur N : 33
+-----------------------
+Montecarlo (B) VS (N) AlphaBeta
+Nombre de pions relatifs(B) VS (N) Nombre de pions relatifs
+Temps pour Montecarlo : 0.5
+Profondeur Noir (2 demi-coups) : 1
+N commence.
+Coup joué :60
+Score du joueur B : 50
+Score du joueur N : 14
+-----------------------
+Montecarlo (B) VS (N) AlphaBeta
+Nombre de pions relatifs(B) VS (N) Nombre de pions relatifs
+Temps pour Montecarlo : 0.5
+Profondeur Noir (2 demi-coups) : 2
+N commence.
+Coup joué :60
+Score du joueur B : 58
+Score du joueur N : 6
+-----------------------
+Montecarlo (B) VS (N) AlphaBeta
+Nombre de pions relatifs(B) VS (N) Poids des cases
+Temps pour Montecarlo : 0.5
+Profondeur Noir (2 demi-coups) : 1
+N commence.
+Coup joué :59
+Score du joueur B : 15
+Score du joueur N : 48
+-----------------------
+Montecarlo (B) VS (N) AlphaBeta
+Nombre de pions relatifs(B) VS (N) Poids des cases
+Temps pour Montecarlo : 0.5
+Profondeur Noir (2 demi-coups) : 2
+N commence.
+Coup joué :60
+Score du joueur B : 27
+Score du joueur N : 37
+-----------------------
+Montecarlo (B) VS (N) AlphaBeta
+Poids des cases(B) VS (N) Nombre de pions relatifs
+Temps pour Montecarlo : 0.5
+Profondeur Noir (2 demi-coups) : 1
+N commence.
+Coup joué :60
+Score du joueur B : 47
+Score du joueur N : 17
+-----------------------
+Montecarlo (B) VS (N) AlphaBeta
+Poids des cases(B) VS (N) Nombre de pions relatifs
+Temps pour Montecarlo : 0.5
+Profondeur Noir (2 demi-coups) : 2
+N commence.
+Coup joué :60
+Score du joueur B : 20
+Score du joueur N : 44
+-----------------------
+Montecarlo (B) VS (N) AlphaBeta
+Poids des cases(B) VS (N) Poids des cases
+Temps pour Montecarlo : 0.5
+Profondeur Noir (2 demi-coups) : 1
+N commence.
+Coup joué :60
+Score du joueur B : 21
+Score du joueur N : 43
+-----------------------
+Montecarlo (B) VS (N) AlphaBeta
+Poids des cases(B) VS (N) Poids des cases
+Temps pour Montecarlo : 0.5
+Profondeur Noir (2 demi-coups) : 2
+N commence.
+Coup joué :60
+Score du joueur B : 23
+Score du joueur N : 41
+-----------------------
+Montecarlo (B) VS (N) Montecarlo
+Nombre de pions relatifs(B) VS (N) Nombre de pions relatifs
+Temps pour Montecarlo : 0.5
+N commence.
+Coup joué :60
+Score du joueur B : 34
+Score du joueur N : 30
+-----------------------
+Montecarlo (B) VS (N) Montecarlo
+Nombre de pions relatifs(B) VS (N) Poids des cases
+Temps pour Montecarlo : 0.5
+N commence.
+Coup joué :60
+Score du joueur B : 24
+Score du joueur N : 40
+-----------------------
+Montecarlo (B) VS (N) Montecarlo
+Poids des cases(B) VS (N) Nombre de pions relatifs
+Temps pour Montecarlo : 0.5
+N commence.
+Coup joué :60
+Score du joueur B : 24
+Score du joueur N : 40
+-----------------------
+Montecarlo (B) VS (N) Montecarlo
+Poids des cases(B) VS (N) Poids des cases
+Temps pour Montecarlo : 0.5
+N commence.
+Coup joué :60
+Score du joueur B : 18
+Score du joueur N : 46
+-----------------------
+Montecarlo (B) VS (N) Random
+Nombre de pions relatifs(B) VS (N) Nombre de pions relatifs
+Temps pour Montecarlo : 0.5
+N commence.
+Coup joué :60
+Score du joueur B : 57
+Score du joueur N : 7
+-----------------------
+Montecarlo (B) VS (N) Random
+Nombre de pions relatifs(B) VS (N) Poids des cases
+Temps pour Montecarlo : 0.5
+N commence.
+Coup joué :60
+Score du joueur B : 47
+Score du joueur N : 17
+-----------------------
+Montecarlo (B) VS (N) Random
+Poids des cases(B) VS (N) Nombre de pions relatifs
+Temps pour Montecarlo : 0.5
+N commence.
+Coup joué :60
+Score du joueur B : 23
+Score du joueur N : 41
+-----------------------
+Montecarlo (B) VS (N) Random
+Poids des cases(B) VS (N) Poids des cases
+Temps pour Montecarlo : 0.5
+N commence.
+Coup joué :60
+Score du joueur B : 37
+Score du joueur N : 27
+-----------------------
+Random (B) VS (N) MinMaxV1MeilleurCoup
+Nombre de pions relatifs(B) VS (N) Nombre de pions relatifs
+N commence.
+Coup joué :60
+Score du joueur B : 22
+Score du joueur N : 42
+-----------------------
+Random (B) VS (N) MinMaxV1MeilleurCoup
+Nombre de pions relatifs(B) VS (N) Poids des cases
+N commence.
+Coup joué :60
+Score du joueur B : 19
+Score du joueur N : 45
+-----------------------
+Random (B) VS (N) MinMaxV1MeilleurCoup
+Poids des cases(B) VS (N) Nombre de pions relatifs
+N commence.
+Coup joué :60
+Score du joueur B : 29
+Score du joueur N : 35
+-----------------------
+Random (B) VS (N) MinMaxV1MeilleurCoup
+Poids des cases(B) VS (N) Poids des cases
+N commence.
+Coup joué :60
+Score du joueur B : 17
+Score du joueur N : 47
+-----------------------
+Random (B) VS (N) MinMaxMaximise
+Nombre de pions relatifs(B) VS (N) Nombre de pions relatifs
+Profondeur Noir (2 demi-coups) : 1
+N commence.
+Coup joué :60
+Score du joueur B : 34
+Score du joueur N : 30
+-----------------------
+Random (B) VS (N) MinMaxMaximise
+Nombre de pions relatifs(B) VS (N) Nombre de pions relatifs
+Profondeur Noir (2 demi-coups) : 2
+N commence.
+Coup joué :60
+Score du joueur B : 23
+Score du joueur N : 41
+-----------------------
+Random (B) VS (N) MinMaxMaximise
+Nombre de pions relatifs(B) VS (N) Poids des cases
+Profondeur Noir (2 demi-coups) : 1
+N commence.
+Coup joué :60
+Score du joueur B : 32
+Score du joueur N : 32
+-----------------------
+Random (B) VS (N) MinMaxMaximise
+Nombre de pions relatifs(B) VS (N) Poids des cases
+Profondeur Noir (2 demi-coups) : 2
+N commence.
+Coup joué :60
+Score du joueur B : 13
+Score du joueur N : 51
+-----------------------
+Random (B) VS (N) MinMaxMaximise
+Poids des cases(B) VS (N) Nombre de pions relatifs
+Profondeur Noir (2 demi-coups) : 1
+N commence.
+Coup joué :60
+Score du joueur B : 30
+Score du joueur N : 34
+-----------------------
+Random (B) VS (N) MinMaxMaximise
+Poids des cases(B) VS (N) Nombre de pions relatifs
+Profondeur Noir (2 demi-coups) : 2
+N commence.
+Coup joué :60
+Score du joueur B : 11
+Score du joueur N : 53
+-----------------------
+Random (B) VS (N) MinMaxMaximise
+Poids des cases(B) VS (N) Poids des cases
+Profondeur Noir (2 demi-coups) : 1
+N commence.
+Coup joué :60
+Score du joueur B : 33
+Score du joueur N : 31
+-----------------------
+Random (B) VS (N) MinMaxMaximise
+Poids des cases(B) VS (N) Poids des cases
+Profondeur Noir (2 demi-coups) : 2
+N commence.
+Coup joué :60
+Score du joueur B : 22
+Score du joueur N : 42
+-----------------------
+Random (B) VS (N) AlphaBeta
+Nombre de pions relatifs(B) VS (N) Nombre de pions relatifs
+Profondeur Noir (2 demi-coups) : 1
+N commence.
+Coup joué :60
+Score du joueur B : 33
+Score du joueur N : 31
+-----------------------
+Random (B) VS (N) AlphaBeta
+Nombre de pions relatifs(B) VS (N) Nombre de pions relatifs
+Profondeur Noir (2 demi-coups) : 2
+N commence.
+Coup joué :60
+Score du joueur B : 44
+Score du joueur N : 20
+-----------------------
+Random (B) VS (N) AlphaBeta
+Nombre de pions relatifs(B) VS (N) Poids des cases
+Profondeur Noir (2 demi-coups) : 1
+N commence.
+Coup joué :60
+Score du joueur B : 34
+Score du joueur N : 30
+-----------------------
+Random (B) VS (N) AlphaBeta
+Nombre de pions relatifs(B) VS (N) Poids des cases
+Profondeur Noir (2 demi-coups) : 2
+N commence.
+Coup joué :60
+Score du joueur B : 12
+Score du joueur N : 52
+-----------------------
+Random (B) VS (N) AlphaBeta
+Poids des cases(B) VS (N) Nombre de pions relatifs
+Profondeur Noir (2 demi-coups) : 1
+N commence.
+Coup joué :60
+Score du joueur B : 34
+Score du joueur N : 30
+-----------------------
+Random (B) VS (N) AlphaBeta
+Poids des cases(B) VS (N) Nombre de pions relatifs
+Profondeur Noir (2 demi-coups) : 2
+N commence.
+Coup joué :13
+Score du joueur B : 0
+Score du joueur N : 64
+-----------------------
+Random (B) VS (N) AlphaBeta
+Poids des cases(B) VS (N) Poids des cases
+Profondeur Noir (2 demi-coups) : 1
+N commence.
+Coup joué :60
+Score du joueur B : 27
+Score du joueur N : 37
+-----------------------
+Random (B) VS (N) AlphaBeta
+Poids des cases(B) VS (N) Poids des cases
+Profondeur Noir (2 demi-coups) : 2
+N commence.
+Coup joué :60
+Score du joueur B : 18
+Score du joueur N : 46
+-----------------------
+Random (B) VS (N) Montecarlo
+Nombre de pions relatifs(B) VS (N) Nombre de pions relatifs
+Temps pour Montecarlo : 0.5
+N commence.
+Coup joué :60
+Score du joueur B : 31
+Score du joueur N : 33
+-----------------------
+Random (B) VS (N) Montecarlo
+Nombre de pions relatifs(B) VS (N) Poids des cases
+Temps pour Montecarlo : 0.5
+N commence.
+Coup joué :60
+Score du joueur B : 15
+Score du joueur N : 49
+-----------------------
+Random (B) VS (N) Montecarlo
+Poids des cases(B) VS (N) Nombre de pions relatifs
+Temps pour Montecarlo : 0.5
+N commence.
+Coup joué :60
+Score du joueur B : 18
+Score du joueur N : 46
+-----------------------
+Random (B) VS (N) Montecarlo
+Poids des cases(B) VS (N) Poids des cases
+Temps pour Montecarlo : 0.5
+N commence.
+Coup joué :59
+Score du joueur B : 5
+Score du joueur N : 58
+-----------------------
+Random (B) VS (N) Random
+Nombre de pions relatifs(B) VS (N) Nombre de pions relatifs
+N commence.
+Coup joué :60
+Score du joueur B : 33
+Score du joueur N : 31
+-----------------------
+Random (B) VS (N) Random
+Nombre de pions relatifs(B) VS (N) Poids des cases
+N commence.
+Coup joué :60
+Score du joueur B : 29
+Score du joueur N : 35
+-----------------------
+Random (B) VS (N) Random
+Poids des cases(B) VS (N) Nombre de pions relatifs
+N commence.
+Coup joué :60
+Score du joueur B : 34
+Score du joueur N : 30
+-----------------------
+Random (B) VS (N) Random
+Poids des cases(B) VS (N) Poids des cases
+N commence.
+Coup joué :60
+Score du joueur B : 30
+Score du joueur N : 34

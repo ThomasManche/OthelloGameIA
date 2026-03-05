@@ -3,8 +3,8 @@
 import numpy
 import time
 import copy
-
-
+import random as rand
+import threading
 # Jeu d'Othello : Variable
 
 plat = numpy.zeros((8,8),str)
@@ -41,7 +41,6 @@ def checkCoup(x,y,incrementX, incrementY,plateau, joueur=None):
 def CoupAutorise(i,j, plateau, joueur=None):
     if joueur is None:
         joueur = TourActuel
-
     #On doit check chaque diagonale & Chaque côté pour voir si le coup est autorisé
     if plateau[i][j]!=' ':
         return False
@@ -137,12 +136,7 @@ def PosePion(i,j,plateau, joueur=None):
         if checkCoup(i,j,0,1,plateau,joueur):
             ChangeCaseCoupAutorise(i,j,0,1,plateau,joueur)
 
-def CoupJoue(i,j,plateau):
-    if CoupAutorise(i,j,plateau):
-        PosePion(i,j,plateau)
-        ChangeTour()
-
-def isFinished(plateau):
+def isFinished(plateau, simulation=False):
     condRemplissage=True
     condCoupPossible=False
     for i in range(0,len(plateau)):
@@ -154,13 +148,12 @@ def isFinished(plateau):
     if condCoupPossible==False and condRemplissage==False:
         for i in range(0,len(plateau)):
             for j in range(0,len(plateau[0])):
-                if CoupAutorise(i,j,plateau,"B" if TourActuel=="N" else "N"):
+                if CoupAutorise(i,j,plateau,"B" if TourActuel=="N" else "N") and simulation==False:
                     #print("Le joueur "+TourActuel+ " ne peut pas jouer, on repasse directement au joueur "+"B" if TourActuel=="N" else "N")
                     ChangeTour()
                     return False
     if condRemplissage==True or condCoupPossible==False or nombrePion("N", plat)==0 or nombrePion("B",plat)==0:
         return True
-        
     return False
     
 
@@ -169,24 +162,24 @@ def isFinished(plateau):
 TourActuel=PionNoir
 
 def TestFonction():
-    global TourActuel
+    global TourActuel, tempsMontecarlo
     InitialisePlateau()
     print(plat)
     print("JEU D'OTHELLO")
     TourActuel=PionNoir
     while True:
-
         #time.sleep(1)
-        if TourActuel=="B":
+        if TourActuel=="N":
             #(x,y),_=MinMaxMaximise(TourActuel, plat, 2,2)
-            (x,y)=MinMaxV1meilleurCoup(TourActuel,plat,2)
+            (x,y)=MonteCarloMain(TourActuel,plat,tempsMontecarlo)
         else:
-            (x,y)=MinMaxV1meilleurCoup(TourActuel,plat,2)
+            (x,y),_=AlphaBetaMax(TourActuel,plat,4,float("-inf"),float("inf"),2)
+            time.sleep(tempsMontecarlo)
         #x=int(input("x:"))
         #y=int(input("y:"))
         if CoupAutorise(x,y,plat):
             PosePion(x,y,plat)
-            print(plat)
+            #print(plat)
             ChangeTour()
             if isFinished(plat):
                 print(plat)
@@ -197,9 +190,31 @@ def TestFonction():
 
         else:
             print("Coup non valable !")
+            print(str(x) + " et " + str(y))
            
             print(plat)
+            print(str(TourActuel))
             
+
+tempsMontecarlo=0.5
+
+VerboseTourActuel=["N","B"]
+VerboseIA=["MinMaxV1MeilleurCoup","MinMaxMaximise","AlphaBeta","Montecarlo","Random"]
+VerboseScore=["Nombre de pions relatifs", "Poids des cases"]
+
+def writeStat(i,j,k,l,m,n):
+    with open('resultat.txt','a') as f:
+        f.write("-----------------------\n")
+        f.write(VerboseIA[i] + " (B) VS (N) "+ VerboseIA[j]+"\n")
+        f.write(VerboseScore[k-1] + "(B) VS (N) "+ VerboseScore[l-1]+"\n")
+        if VerboseIA[i]=="Montecarlo" or VerboseIA[j]=="Montecarlo":
+            f.write("Temps pour Montecarlo : "+str(tempsMontecarlo) + "\n")
+        if VerboseIA[i]=="MinMaxMaximise" or VerboseIA[i]=="AlphaBeta":
+            f.write("Profondeur Blanc (2 demi-coups) : "+ str(m)+ "\n")
+        if VerboseIA[j]=="MinMaxMaximise" or VerboseIA[j]=="AlphaBeta":
+            f.write("Profondeur Noir (2 demi-coups) : "+ str(n)+"\n")
+        f.write(TourActuel + " commence.\n")
+
 
 def getResultat():
     RecursiviteMax=2
@@ -207,43 +222,51 @@ def getResultat():
     with open('resultat.txt','w') as f:
         f.write("Jeu d'Othello - Résultats \n")
     global TourActuel
-    for t in range(0,2):
-        for i in range(0,2):
+    for t in range(0,1):
+        for i in range(0,5):
             #Fonction pour B
-            for j in range(0,2):
+            for j in range(0,5):
                 #Fonction pour N
                 for k in range(1,3):
                     #Score pour B
                     for l in range(1,3):
                         #Score pour N
                         for m in range(1,RecursiviteMax+1):
-                            if m==2 and i!=1:
+                            if m==2 and (i!=1 and i!=2):
                                 break
                             for n in range(1,RecursiviteMax+1):
-                                if n==2 and j!=1:
+                                if n==2 and (j!=1 and j!=2):
                                     break
                                 InitialisePlateau()
                                 pt=0
-                                print("Tour "+str(compteurTour))
-                                compteurTour+=1
                                 if t==0:
                                     TourActuel="N"
                                 else:
                                     TourActuel="B"
-                                print(str(i) + ","+ str(j)+","+str(k)+","+str(l)+","+str(m)+","+str(n) + " pour le tour "+ TourActuel + "\n")
-                                with open('resultat.txt','a') as f:
-                                    f.write(str(i) + ","+ str(j)+","+str(k)+","+str(l)+","+str(m)+","+str(n) + " pour le tour "+ TourActuel + "\n")
+                                writeStat(i,j,k,l,m,n)
                                 while True:
                                     if TourActuel=="B":
                                         if i==0:
                                             (x,y)=MinMaxV1meilleurCoup(TourActuel,plat,k)
-                                        else:
+                                        elif i==1:
                                             (x,y),_=MinMaxMaximise(TourActuel,plat,m,k)
+                                        elif i==2:
+                                            (x,y),_=AlphaBetaMax(TourActuel,plat,m,float("-inf"),float("inf"),k)
+                                        elif i==3:
+                                            (x,y)=MonteCarloMain(TourActuel,plat,tempsMontecarlo)
+                                        elif i==4:
+                                            (x,y)=randomPlay(plat,TourActuel)
                                     else:
                                         if j==0:
                                             (x,y)=MinMaxV1meilleurCoup(TourActuel,plat,l)
-                                        else:
+                                        elif j==1:
                                             (x,y),_=MinMaxMaximise(TourActuel,plat,n,l)      
+                                        elif j==2:
+                                            (x,y),_=AlphaBetaMax(TourActuel,plat,n,float("-inf"),float("inf"),l)
+                                        elif j==3:
+                                            (x,y)=MonteCarloMain(TourActuel,plat,tempsMontecarlo)
+                                        elif j==4:
+                                            (x,y)=randomPlay(plat,TourActuel)
                                     if CoupAutorise(x,y,plat):
                                         pt+=1
                                         PosePion(x,y,plat)
@@ -321,7 +344,7 @@ def MinMaxV1meilleurCoup(joueur, plateau,versionScore=1 ):
 ############################################################################################################
 
 def MinMaxMinimise(joueur, plateau,profondeur,versionScore):
-    # Cette fonction doit retourner le meilleur coup pour l'adversaire donné "N" ou "B"
+    # Cette fonction doit retourner le meilleur coup pour le joueur  donné "N" ou "B"
     platTemp = copy.deepcopy(plateau)
     scoreTemp = 0
     scoreMeilleur = float("inf")
@@ -436,12 +459,166 @@ def scorePoidsCase(joueur, plat):
     return score - scoreAdversaire
 
 
-    
+############################################################################################################
+#==========================================================================================================#
+#================================== V4: Algo Alpha-Beta  =========================================#
+#==========================================================================================================#
+############################################################################################################
 
-    
-    
 
 
+def AlphaBetaMax(joueur, plateau, profondeur, alpha, beta,versionScore=1):
+    # Cette fonction doit retourner le meilleur coup pour le joueur donné "N" ou "B"
+    #utilise les algorithmes de minimax avec élagage alpha-beta pour déterminer le meilleur coup pour le joueur donné "N" ou "B"
+    plateauTemp = None
+    bestCoup = (None,None)
+    v = 0
+    if profondeur==4:
+        print("DEBUT DU ALPHA BETA")
+    if profondeur==0:
+        if versionScore==1:
+            return bestCoup,score(joueur,plateau)
+        elif versionScore==2:
+            return bestCoup,scorePoidsCase(joueur,plateau)
+    for i in range ( 0, len(plateau)):
+        for j in range ( 0, len(plateau[i])):
+            if CoupAutorise(i,j,plateau, joueur):
+                if profondeur==4:
+                    print("ici : "+str(i) + "," + str(j))
+                #print("Coup autorisé pour i:"+str(i) + "et j : "+ str(j))
+                plateauTemp=copy.deepcopy(plateau)
+                PosePion(i,j,plateauTemp, joueur) # fonction plaçant le pion du joueur sur le plateau temporaire
+                _, v =  AlphaBetaMin(joueur, plateauTemp, profondeur, alpha, beta, versionScore)
+                if profondeur==4:
+                    print("comparaison : "+ str(v)+ "," + str(alpha))
+                if bestCoup==(None,None):
+                    bestCoup=(i,j)
+                if v > alpha :
+                    alpha = v
+                    bestCoup = (i,j)
+                if alpha >= beta:
+                    return bestCoup, alpha
+    if profondeur==4:
+        print("couple: ")
+        print(bestCoup)
+    return bestCoup, alpha
     
-#TestFonction()
+def AlphaBetaMin(joueur, plateau, profondeur, alpha, beta, versionScore=1): 
+    # Cette fonction doit retourner le meilleur coup pour le joueur donné "N" ou "B"
+    #utilise les algorithmes de minimax avec élagage alpha-beta pour déterminer le meilleur coup pour le joueur donné "N" ou "B"
+    plateauTemp = None
+    bestCoup = (None,None)
+    scoreTemp = 0
+    bestscore = float("-inf")
+    v = 0
+    for i in range ( 0, len(plateau)):
+        for j in range ( 0, len(plateau[i])):
+            if CoupAutorise(i,j,plateau,"B" if joueur=="N" else "N"):
+                #print("Coup autorisé pour i:"+str(i) + "et j : "+ str(j))
+                plateauTemp=copy.deepcopy(plateau)
+                PosePion(i,j,plateauTemp,"B" if joueur=="N" else "N") # fonction plaçant le pion du joueur sur le plateau temporaire
+                _, v =  AlphaBetaMax(joueur, plateauTemp, profondeur-1, alpha, beta, versionScore)
+                if bestCoup==(None,None):
+                    bestCoup=(i,j)
+                if v < beta :
+                    beta = v
+                    bestCoup = (i,j)
+                if alpha >= beta:
+                    return bestCoup, beta
+    return bestCoup, beta
+
+
+
+
+############################################################################################################
+#==========================================================================================================#
+#================================== V5: Monte-Carlo Algorithm  =========================================#
+#==========================================================================================================#
+############################################################################################################
+
+#First version of the MonteCarlo algorithm, where each move is simulated during the lapse accorded, and we take the best score, all of that randomly :)
+def getAllPossibleHit(plateau,joueur):
+    PossibleHit=[]
+    for i in range(0,8):
+        for j in range(0,8):
+            if CoupAutorise(i,j,plateau,joueur):
+                PossibleHit.append([i,j])
+    return PossibleHit
+
+
+def MonteCarloMain(joueur,plateau,tempsSimulation):
+    PossibleHit=getAllPossibleHit(plateau,joueur)
+    if len(PossibleHit)==0:
+        return None
+    if len(PossibleHit)==1:
+        return PossibleHit[0][0], PossibleHit[0][1]
+    BestScore=float("-inf")
+    BestIndex=-1
+    for i in range(0, len(PossibleHit)):
+        platSimulation=copy.deepcopy(plateau)
+        PosePion(PossibleHit[i][0],PossibleHit[i][1],platSimulation,joueur)
+        AvgScoreSimulation=MonteCarloSimulation(platSimulation,joueur,tempsSimulation/float(len(PossibleHit)))
+        if AvgScoreSimulation>BestScore:
+            BestScore=AvgScoreSimulation
+            BestIndex=i
+    return PossibleHit[BestIndex][0],PossibleHit[BestIndex][1]
+
+
+
+SimulationTimeElapsed=False
+
+
+def MonteCarloSimulation(plateau,joueur,tempsSimulation):
+    global SimulationTimeElapsed
+    SimulationTimeElapsed=False
+    scoreActuel=0
+    numberOfSimulation=0
+
+    threading.Thread(target=MonteCarloThreadTime,args=(tempsSimulation,)).start()
+    while SimulationTimeElapsed==False:
+        plat=copy.deepcopy(plateau)
+        ActuelJoueur=("B" if joueur=="N" else "N")
+        while True:
+            if SimulationTimeElapsed==True:
+                break
+            PossibleHit=getAllPossibleHit(plat,ActuelJoueur)
+            if len(PossibleHit)!=0:
+                IndexPlayed=rand.randint(0,len(PossibleHit)-1)
+            else:
+                ActuelJoueur=("B" if ActuelJoueur=="N" else "N")    
+                continue
+            PosePion(PossibleHit[IndexPlayed][0],PossibleHit[IndexPlayed][1],plat,ActuelJoueur)
+            ActuelJoueur=("B" if ActuelJoueur=="N" else "N")
+            if isFinished(plat,True):
+                scoreActuel+=score(joueur,plat)
+                numberOfSimulation+=1
+                break
+    if numberOfSimulation!=0:
+        return scoreActuel/numberOfSimulation
+    else:
+        return 0
+
+
+
+def MonteCarloThreadTime(tempsSimulation):
+    global SimulationTimeElapsed
+    time.sleep(tempsSimulation)
+    SimulationTimeElapsed=True
+    return
+
+############################################################################################################
+#==========================================================================================================#
+#================================== V6: Random algorithm  =========================================#
+#==========================================================================================================#
+############################################################################################################
+#Algorithm that make all of his choices RANDOMLY ! Used not for performance, but to check mostly the adaptability of each program
+
+def randomPlay(plateau,joueur):
+    PossibleHit=getAllPossibleHit(plateau,joueur)
+    if len(PossibleHit)!=0:
+        IndexPlayed=rand.randint(0,len(PossibleHit)-1)
+    return PossibleHit[IndexPlayed][0],PossibleHit[IndexPlayed][1]
+
+#for i in range(0,10):
+    #TestFonction()
 getResultat()

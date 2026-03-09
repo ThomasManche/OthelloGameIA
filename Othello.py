@@ -173,13 +173,13 @@ def TestFonction():
             #(x,y),_=MinMaxMaximise(TourActuel, plat, 2,2)
             (x,y)=MonteCarloMain(TourActuel,plat,tempsMontecarlo)
         else:
-            (x,y),_=AlphaBetaMax(TourActuel,plat,4,float("-inf"),float("inf"),2)
+            (x,y),_=AlphaBetaMax(TourActuel,plat,2,float("-inf"),float("inf"),3)
             time.sleep(tempsMontecarlo)
         #x=int(input("x:"))
         #y=int(input("y:"))
         if CoupAutorise(x,y,plat):
             PosePion(x,y,plat)
-            #print(plat)
+            print(plat)
             ChangeTour()
             if isFinished(plat):
                 print(plat)
@@ -195,12 +195,9 @@ def TestFonction():
             print(plat)
             print(str(TourActuel))
             
-
-tempsMontecarlo=0.5
-
 VerboseTourActuel=["N","B"]
 VerboseIA=["MinMaxV1MeilleurCoup","MinMaxMaximise","AlphaBeta","Montecarlo","Random"]
-VerboseScore=["Nombre de pions relatifs", "Poids des cases"]
+VerboseScore=["Nombre de pions relatifs", "Poids des cases","scoreMobilite", "Mixte"]
 
 def writeStat(i,j,k,l,m,n):
     with open('resultat.txt','a') as f:
@@ -215,27 +212,70 @@ def writeStat(i,j,k,l,m,n):
             f.write("Profondeur Noir (2 demi-coups) : "+ str(n)+"\n")
         f.write(TourActuel + " commence.\n")
 
+def writeStatisticTimeandNodes(i,j):
+    with open('resultat.txt','a',encoding='utf-8') as f:
+        f.write("Temps moyen Noir :"+str(BlackTimeUsed/BlackMoves) + " sec\n")
+        f.write("BlackNumberOfNodes:"+str(BlackNumberOfNodes)+"\n")
+        f.write("BlackNumberOfNodesPerTurn:"+str(BlackNumberOfNodes/BlackMoves)+"\n")
+        if j==1 or j==2:
+            f.write("BlackNodesPerDepth:"+"\n")
+            for i in range(0,len(BlackNodesPerDepth)):
+                f.write("Profondeur "+str(i)+":"+str(BlackNodesPerDepth[i]/BlackMoves) + "("+str(BlackNodesPerDepth[i])+" Total)"+"\n")
+        f.write("Temps moyen Blanc :"+str(WhitetimeUsed/WhiteMoves) + " sec\n")
+        f.write("WhiteNumberOfNodes:"+str(WhiteNumberOfNodes)+"\n")
+        f.write("WhiteNumberOfNodesPerTurn:"+str(WhiteNumberOfNodes/WhiteMoves)+"\n")
+        if i==1 or i==2:
+            f.write("WhiteNodesPerDepth:"+"\n")
+            for i in range(0,len(WhiteNodesPerDepth)):
+                f.write("Profondeur "+str(i+1)+":"+str(WhiteNodesPerDepth[i]/WhiteMoves) + "("+str(WhiteNodesPerDepth[i])+")"+"\n")
+
+#Nombre de coups total
+pt=0
+
+#Nombre de coups par couleur
+#Temps total pour le coup
+
+
+BlackMoves=0
+BlackNumberOfNodes=0
+BlackNodesPerDepth=[]
+BlackTimeUsed=0
+#Nombre de récursivité faite & Nombre de noeuds par "étage"
+WhiteNumberOfNodes=0
+WhiteNodesPerDepth=[]
+WhitetimeUsed=0
+WhiteMoves=0
+
+
+tempsMontecarlo=0.5
 
 def getResultat():
-    RecursiviteMax=2
+    global pt, WhiteNumberOfNodes, WhiteNodesPerDepth, WhitetimeUsed, WhiteMoves, BlackMoves, BlackNumberOfNodes, BlackNodesPerDepth, BlackTimeUsed
+    RecursiviteMax=3
     compteurTour=1
     with open('resultat.txt','w') as f:
         f.write("Jeu d'Othello - Résultats \n")
     global TourActuel
-    for t in range(0,1):
+    for t in range(0,2):
         for i in range(0,5):
             #Fonction pour B
             for j in range(0,5):
                 #Fonction pour N
-                for k in range(1,3):
+                for k in range(1,5):
                     #Score pour B
-                    for l in range(1,3):
+                    for l in range(1,5):
                         #Score pour N
                         for m in range(1,RecursiviteMax+1):
                             if m==2 and (i!=1 and i!=2):
                                 break
+                            #On fait MinMax a profondeur 2 max, car sinon cela prend trop de temps
+                            if m==3 and i!=2:
+                                break
                             for n in range(1,RecursiviteMax+1):
                                 if n==2 and (j!=1 and j!=2):
+                                    break
+                                #On fait MinMax a profondeur 2 max, car sinon cela prend trop de temps
+                                if n==3 and j!=2:
                                     break
                                 InitialisePlateau()
                                 pt=0
@@ -244,8 +284,18 @@ def getResultat():
                                 else:
                                     TourActuel="B"
                                 writeStat(i,j,k,l,m,n)
+                                WhiteNumberOfNodes=0
+                                WhiteNodesPerDepth=[0]*m
+                                WhitetimeUsed=0
+                                WhiteMoves=0
+                                BlackMoves=0
+                                BlackNumberOfNodes=0
+                                BlackNodesPerDepth=[0]*n
+                                BlackTimeUsed=0
                                 while True:
                                     if TourActuel=="B":
+                                        timeStart=time.time()
+                                        WhiteMoves+=1
                                         if i==0:
                                             (x,y)=MinMaxV1meilleurCoup(TourActuel,plat,k)
                                         elif i==1:
@@ -256,7 +306,11 @@ def getResultat():
                                             (x,y)=MonteCarloMain(TourActuel,plat,tempsMontecarlo)
                                         elif i==4:
                                             (x,y)=randomPlay(plat,TourActuel)
+                                        timeStop=time.time()
+                                        WhitetimeUsed+=timeStop-timeStart
                                     else:
+                                        timeStart=time.time()
+                                        BlackMoves+=1
                                         if j==0:
                                             (x,y)=MinMaxV1meilleurCoup(TourActuel,plat,l)
                                         elif j==1:
@@ -267,12 +321,15 @@ def getResultat():
                                             (x,y)=MonteCarloMain(TourActuel,plat,tempsMontecarlo)
                                         elif j==4:
                                             (x,y)=randomPlay(plat,TourActuel)
+                                        timeStop=time.time()
+                                        BlackTimeUsed+=timeStop-timeStart
                                     if CoupAutorise(x,y,plat):
                                         pt+=1
                                         PosePion(x,y,plat)
                                         ChangeTour()
                                         if isFinished(plat):
                                             #print(plat)
+                                            writeStatisticTimeandNodes(i,j)
                                             with open('resultat.txt','a') as f:
                                                 f.write("Coup joué :"+str(pt)+ "\n")
                                                 f.write("Score du joueur B : "+str(nombrePion("B",plat))+"\n")
@@ -290,21 +347,30 @@ def getResultat():
 # Le joueur choisit le coup qui minimise le meilleur score de l adversaire après que le joueur ait joué son coup.   
   
 def MinMaxV1meilleurScoreAdversaire(joueur, plateauTemp,versionScore):
+    global WhiteNumberOfNodes, WhiteNodesPerDepth, BlackNumberOfNodes, BlackNodesPerDepth
+    if TourActuel=="B":
+        WhiteNumberOfNodes+=1
+    else:
+        BlackNumberOfNodes+=1
     # Cette fonction doit retourner le meilleur coup pour l'adversaire donné "N" ou "B"
     platTemp = copy.deepcopy(plateauTemp)
     scoreTemp = 0
     scoreMeilleur = float("-inf")
     coupPossible=False
-
     for i in range ( 0, len(platTemp)):
         for j in range ( 0, len(platTemp[i])):
             if CoupAutorise(i,j,platTemp):
                 coupPossible=True
                 PosePion(i,j,platTemp) # fonction plaçant le pion de l'adversaire sur le plateau temporaire
+                #choix du score/strategie de recherche à utiliser pour évaluer le plateau après que l adversaire ait joué son coup
                 if versionScore==1:
                     scoreTemp = score(joueur , platTemp)
                 elif versionScore==2:
                     scoreTemp=scorePoidsCase(joueur, platTemp)
+                elif versionScore==3:
+                    scoreTemp=scoreMobilite(joueur, platTemp)
+                elif versionScore==4:
+                    scoreTemp=scoreMixte(joueur,platTemp)
                 if scoreTemp > scoreMeilleur:
                     scoreMeilleur = scoreTemp
                 platTemp = copy.deepcopy(plateauTemp)
@@ -317,13 +383,17 @@ def MinMaxV1meilleurScoreAdversaire(joueur, plateauTemp,versionScore):
                 
 
 def MinMaxV1meilleurCoup(joueur, plateau,versionScore=1 ):
+    global WhiteNumberOfNodes, WhiteNodesPerDepth, BlackNumberOfNodes, BlackNodesPerDepth
+    if TourActuel=="B":
+        WhiteNumberOfNodes+=1
+    else:
+        BlackNumberOfNodes+=1
     # Cette fonction doit retourner le meilleur coup pour le joueur donné "N" ou "B"
     #le meilleure coup est déterminé comme le coup qui minimise le meillescore de l'adversaire après que le joueur ait joué son coup
     plateauTemp = copy.deepcopy(plateau)
     coupMeilleurs = None
     scoreTemp = 0
     scoreAdver = 999999999
-    
     for i in range ( 0, len(plateauTemp)):
         for j in range ( 0, len(plateauTemp[i])):
             if CoupAutorise(i,j,plateauTemp):
@@ -344,6 +414,13 @@ def MinMaxV1meilleurCoup(joueur, plateau,versionScore=1 ):
 ############################################################################################################
 
 def MinMaxMinimise(joueur, plateau,profondeur,versionScore):
+    global WhiteNumberOfNodes, WhiteNodesPerDepth, BlackNumberOfNodes, BlackNodesPerDepth
+    if joueur=="B":
+        WhiteNumberOfNodes+=1
+        WhiteNodesPerDepth[profondeur-1]+=1
+    else:
+        BlackNodesPerDepth[profondeur-1]+=1
+        BlackNumberOfNodes+=1
     # Cette fonction doit retourner le meilleur coup pour le joueur  donné "N" ou "B"
     platTemp = copy.deepcopy(plateau)
     scoreTemp = 0
@@ -367,6 +444,13 @@ def MinMaxMinimise(joueur, plateau,profondeur,versionScore):
                 
 
 def MinMaxMaximise(joueur, plateau,profondeur, versionScore=1 ):
+    global WhiteNumberOfNodes, WhiteNodesPerDepth, BlackNumberOfNodes, BlackNodesPerDepth
+    if joueur=="B":
+        WhiteNumberOfNodes+=1
+        WhiteNodesPerDepth[profondeur-1]+=1
+    else:
+        BlackNodesPerDepth[profondeur-1]+=1
+        BlackNumberOfNodes+=1
     # Cette fonction doit retourner le meilleur coup pour le joueur donné "N" ou "B"
     #le meilleure coup est déterminé comme le coup qui minimise le meillescore de l'adversaire après que le joueur ait joué son coup
     plateauTemp = None
@@ -378,6 +462,10 @@ def MinMaxMaximise(joueur, plateau,profondeur, versionScore=1 ):
             return bestCoup,score(joueur,plateau)
         elif versionScore==2:
             return bestCoup,scorePoidsCase(joueur,plateau)
+        elif versionScore==3:
+            return bestCoup,scoreMobilite(joueur,plateau)
+        elif versionScore==4:
+            return bestCoup, scoreMixte(joueur,plateau)
     for i in range ( 0, len(plateau)):
         for j in range ( 0, len(plateau[i])):
             if CoupAutorise(i,j,plateau):
@@ -458,7 +546,32 @@ def scorePoidsCase(joueur, plat):
                 score+=tableauPoids[i][j]
     return score - scoreAdversaire
 
+def scoreMobilite(joueur, plat): # peut rendre un entier négatif, positif ou nul
+    # Cette fonction doit retourner le score du joueur donné "N" ou "B"
+    # Le score est défini comme le nombre de coups possibles pour le joueur - le nombre de coups possibles pour l'adversaire
+    score = 0
+    scoreAdversaire=0
+    for i in range ( 0, len(plat)):
+        for j in range ( 0, len(plat[i])):
+            if CoupAutorise(i,j,plat,joueur):#on verifie les coups possibles pour le joueur
+                score+=1
+                if (i,j) in [(0,0),(0,7),(7,0),(7,7)]:#on donne aux coins un poid plus important car ils sont avantageux pour le joueur
+                    score+=10 
+            #comme une case peut être jouable pour les deux joueurs, on ne met pas de elif, mais un if séparé pour vérifier les coups possibles pour l'adversaire
+            if CoupAutorise(i,j,plat,"B" if joueur=="N" else "N"):#on verifie les coups possibles pour l'adversaire
+                scoreAdversaire+=1
+                if (i,j) in [(0,0),(0,7),(7,0),(7,7)]:# on donne aux coins un poid plus important
+                    scoreAdversaire+=10
+    return score - scoreAdversaire
 
+def scoreMixte(joueur, plat):
+    global pt
+    if pt<20:
+        return scorePoidsCase(joueur,plat)
+    elif pt<50:
+        return scoreMobilite(joueur,plat)
+    else:
+        return nombrePion(joueur,plat)
 ############################################################################################################
 #==========================================================================================================#
 #================================== V4: Algo Alpha-Beta  =========================================#
@@ -468,29 +581,35 @@ def scorePoidsCase(joueur, plat):
 
 
 def AlphaBetaMax(joueur, plateau, profondeur, alpha, beta,versionScore=1):
+    global WhiteNumberOfNodes, WhiteNodesPerDepth, BlackNumberOfNodes, BlackNodesPerDepth
+    if joueur=="B":
+        WhiteNumberOfNodes+=1
+        WhiteNodesPerDepth[profondeur-1]+=1
+    else:
+        BlackNodesPerDepth[profondeur-1]+=1
+        BlackNumberOfNodes+=1
     # Cette fonction doit retourner le meilleur coup pour le joueur donné "N" ou "B"
     #utilise les algorithmes de minimax avec élagage alpha-beta pour déterminer le meilleur coup pour le joueur donné "N" ou "B"
     plateauTemp = None
     bestCoup = (None,None)
     v = 0
-    if profondeur==4:
-        print("DEBUT DU ALPHA BETA")
     if profondeur==0:
+        #choix du score/strategie de recherche à utiliser pour évaluer le plateau à la profondeur 0
         if versionScore==1:
             return bestCoup,score(joueur,plateau)
         elif versionScore==2:
             return bestCoup,scorePoidsCase(joueur,plateau)
+        elif versionScore==3:
+            return bestCoup,scoreMobilite(joueur,plateau)
+        elif versionScore==4:
+            return bestCoup, scoreMixte(joueur,plateau)
     for i in range ( 0, len(plateau)):
         for j in range ( 0, len(plateau[i])):
             if CoupAutorise(i,j,plateau, joueur):
-                if profondeur==4:
-                    print("ici : "+str(i) + "," + str(j))
                 #print("Coup autorisé pour i:"+str(i) + "et j : "+ str(j))
                 plateauTemp=copy.deepcopy(plateau)
                 PosePion(i,j,plateauTemp, joueur) # fonction plaçant le pion du joueur sur le plateau temporaire
                 _, v =  AlphaBetaMin(joueur, plateauTemp, profondeur, alpha, beta, versionScore)
-                if profondeur==4:
-                    print("comparaison : "+ str(v)+ "," + str(alpha))
                 if bestCoup==(None,None):
                     bestCoup=(i,j)
                 if v > alpha :
@@ -498,18 +617,20 @@ def AlphaBetaMax(joueur, plateau, profondeur, alpha, beta,versionScore=1):
                     bestCoup = (i,j)
                 if alpha >= beta:
                     return bestCoup, alpha
-    if profondeur==4:
-        print("couple: ")
-        print(bestCoup)
     return bestCoup, alpha
     
 def AlphaBetaMin(joueur, plateau, profondeur, alpha, beta, versionScore=1): 
+    global WhiteNumberOfNodes, WhiteNodesPerDepth, BlackNumberOfNodes, BlackNodesPerDepth
+    if joueur=="B":
+        WhiteNumberOfNodes+=1
+        WhiteNodesPerDepth[profondeur-1]+=1
+    else:
+        BlackNodesPerDepth[profondeur-1]+=1
+        BlackNumberOfNodes+=1
     # Cette fonction doit retourner le meilleur coup pour le joueur donné "N" ou "B"
     #utilise les algorithmes de minimax avec élagage alpha-beta pour déterminer le meilleur coup pour le joueur donné "N" ou "B"
     plateauTemp = None
     bestCoup = (None,None)
-    scoreTemp = 0
-    bestscore = float("-inf")
     v = 0
     for i in range ( 0, len(plateau)):
         for j in range ( 0, len(plateau[i])):
@@ -547,6 +668,11 @@ def getAllPossibleHit(plateau,joueur):
 
 
 def MonteCarloMain(joueur,plateau,tempsSimulation):
+    global WhiteNumberOfNodes, WhiteNodesPerDepth, BlackNumberOfNodes, BlackNodesPerDepth
+    if joueur=="B":
+        WhiteNumberOfNodes+=1
+    else:
+        BlackNumberOfNodes+=1
     PossibleHit=getAllPossibleHit(plateau,joueur)
     if len(PossibleHit)==0:
         return None
@@ -569,6 +695,7 @@ SimulationTimeElapsed=False
 
 
 def MonteCarloSimulation(plateau,joueur,tempsSimulation):
+    global WhiteNumberOfNodes, WhiteNodesPerDepth, BlackNumberOfNodes, BlackNodesPerDepth
     global SimulationTimeElapsed
     SimulationTimeElapsed=False
     scoreActuel=0
@@ -594,6 +721,10 @@ def MonteCarloSimulation(plateau,joueur,tempsSimulation):
                 numberOfSimulation+=1
                 break
     if numberOfSimulation!=0:
+        if joueur=="B":
+            WhiteNumberOfNodes+=numberOfSimulation
+        else:
+            BlackNumberOfNodes+=numberOfSimulation
         return scoreActuel/numberOfSimulation
     else:
         return 0
@@ -614,11 +745,16 @@ def MonteCarloThreadTime(tempsSimulation):
 #Algorithm that make all of his choices RANDOMLY ! Used not for performance, but to check mostly the adaptability of each program
 
 def randomPlay(plateau,joueur):
+    global WhiteNumberOfNodes, WhiteNodesPerDepth, BlackNumberOfNodes, BlackNodesPerDepth
+    if joueur=="B":
+        WhiteNumberOfNodes+=1
+    else:
+        BlackNumberOfNodes+=1
     PossibleHit=getAllPossibleHit(plateau,joueur)
     if len(PossibleHit)!=0:
         IndexPlayed=rand.randint(0,len(PossibleHit)-1)
     return PossibleHit[IndexPlayed][0],PossibleHit[IndexPlayed][1]
 
-#for i in range(0,10):
-    #TestFonction()
+#TestFonction()
 getResultat()
+

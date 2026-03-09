@@ -1,6 +1,6 @@
 # TP de programmation du jeu d'Othello
 ## Made by : Lavoisier Léandre & Thomas Manche
-###  Students of INSA Hauts-de-France - Project for the class " Fondements de l'IA "
+### Students of INSA Hauts-de-France - Project for the class " Fondements de l'IA "
 
 ## Currently available through this code :
 
@@ -21,8 +21,7 @@
 
 ### pythonanalyse.py
 
-- Fonction d'analyse du fichier resultat.txt pour obtenir l'IA la plus performante, la plus dangereuse en début de partie....
-
+- Fonction d'analyse du fichier resultat.txt pour obtenir l'IA la plus performante, la plus dangereuse en début de partie... (Currently made with Gemini ;D )
 
 ### New Algorithms and score functions that we would like to implement
 

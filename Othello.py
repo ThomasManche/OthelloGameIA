@@ -12,8 +12,6 @@ PionBlanc = "B"
 PionNoir = "N"
 
 
-
-
 def InitialisePlateau():
     global plat
     plat=numpy.zeros((8,8),str)
@@ -161,40 +159,7 @@ def isFinished(plateau, simulation=False):
 
 TourActuel=PionNoir
 
-def TestFonction():
-    global TourActuel, tempsMontecarlo
-    InitialisePlateau()
-    print(plat)
-    print("JEU D'OTHELLO")
-    TourActuel=PionNoir
-    while True:
-        #time.sleep(1)
-        if TourActuel=="N":
-            #(x,y),_=MinMaxMaximise(TourActuel, plat, 2,2)
-            (x,y)=MonteCarloMain(TourActuel,plat,tempsMontecarlo)
-        else:
-            (x,y),_=AlphaBetaMax(TourActuel,plat,2,float("-inf"),float("inf"),3)
-            time.sleep(tempsMontecarlo)
-        #x=int(input("x:"))
-        #y=int(input("y:"))
-        if CoupAutorise(x,y,plat):
-            PosePion(x,y,plat)
-            print(plat)
-            ChangeTour()
-            if isFinished(plat):
-                print(plat)
-                print("C'est fini !")
-                print("Score du joueur B : "+str(nombrePion("B",plat))+"\n")
-                print("Score du joueur N : " + str(nombrePion("N",plat))+"\n")
-                break
 
-        else:
-            print("Coup non valable !")
-            print(str(x) + " et " + str(y))
-           
-            print(plat)
-            print(str(TourActuel))
-            
 VerboseTourActuel=["N","B"]
 VerboseIA=["MinMaxV1MeilleurCoup","MinMaxMaximise","AlphaBeta","Montecarlo","Random"]
 VerboseScore=["Nombre de pions relatifs", "Poids des cases","scoreMobilite", "Mixte"]
@@ -335,6 +300,246 @@ def getResultat():
                                                 f.write("Score du joueur B : "+str(nombrePion("B",plat))+"\n")
                                                 f.write("Score du joueur N : " + str(nombrePion("N",plat))+"\n")
                                             break    
+
+
+def affichagePlat(plat):
+    plateau=numpy.zeros((9,9),str)
+    for i in range(9):
+        for j in range(9):
+            if i==0 and j!=0:
+                plateau[i][j]=j-1
+            elif j==0 and i!=0:
+                plateau[i][j]=i-1
+            elif i==0 and j==0:
+                plateau[i][j]=' '
+                continue
+            else:
+                plateau[i][j]=plat[i-1][j-1]
+            if plateau[i][j]=='':
+                plateau[i][j]==' '
+    for i in range(9):
+        string= "| " 
+        for j in range(9):
+            string+=plateau[i][j] + " | "
+        print(string)
+        print("-------------------------------------")
+
+
+
+IAVouluBlanc=1
+ScoreVouluBlanc=1
+profondeurBlanc=1
+tempsMontecarloBlanc=0.5
+
+IAVouluNoir=1
+ScoreVouluNoir=1
+profondeurNoir=1
+tempsMontecarloNoir=0.5
+
+def afficheInfoIA(Couleur):
+    print("-----")
+    print("Pour l'IA "+ Couleur+" :")
+    print("| Modèle "+ VerboseIA[(IAVouluBlanc-1 if Couleur=="B" else IAVouluNoir-1)])
+    if (IAVouluBlanc if Couleur=="B" else IAVouluNoir)==2 or (IAVouluBlanc if Couleur=="B" else IAVouluNoir)==3:
+        print("| Profondeur : " + str((profondeurBlanc if Couleur=="B" else profondeurNoir)))
+    if ((IAVouluBlanc if Couleur=="B" else IAVouluNoir))!=4 and (IAVouluBlanc if Couleur=="B" else IAVouluNoir)!=5:
+        print("| Fonction de score utilisée : "+VerboseScore[(IAVouluBlanc-1 if Couleur=="B" else IAVouluNoir-1)])
+    if (IAVouluBlanc if Couleur=="B" else IAVouluNoir)==4:
+        print("| Temps de Montecarlo : "+ str((tempsMontecarloBlanc if Couleur=="B" else tempsMontecarloNoir)))
+
+def demandeInfo(Couleur):
+    global IAVouluBlanc, ScoreVouluBlanc, profondeurBlanc, tempsMontecarloBlanc, IAVouluNoir, ScoreVouluNoir, profondeurNoir, tempsMontecarloNoir
+    print("-------------------------------------")
+    print("Configuration pour " + Couleur)
+    while True:
+            print("Quel IA voulu pour les blancs ?")
+            print("| 1: MinMaxV1MeilleurCoup : cherche le pire score pour vous ! ")
+            print("| 2: MinMax : Cherche son meilleure score en minimisant le votre !")
+            print("| 3: AlphaBeta : MinMax optimisé !")
+            print("| 4: Montecarlo : Ces simulations vont vous détruire !")
+            print("| 5: Random : Il ne réfléchit pas... Littéralement !")
+            if Couleur=="B":
+                IAVouluBlanc=int(input("Votre choix :"))
+                choix=IAVouluBlanc
+            else:
+                IAVouluNoir=int(input("Votre choix :"))
+                choix=IAVouluNoir
+            match choix:
+                case 1:
+                    while True:
+                        print("Quel score voulez-vous ?")
+                        print("|1: Score absolue : L'IA cherche à avoir plus de pions que vous")
+                        print("|2: Score relatif : L'IA s'aide d'un tableau de poids")
+                        print("|3: Score mobilité : L'IA cherche à limiter vos coups tout en augmentant ses possibilités")
+                        print("|4: Score mixte : L'IA allie ses stratégies")
+                        if Couleur=="B":
+                            ScoreVouluBlanc=int(input("Votre choix :"))
+                            if ScoreVouluBlanc >= 1 and ScoreVouluBlanc <= 4 : 
+                                break
+                        else:
+                            ScoreVouluNoir=int(input("Votre choix :"))
+                            if ScoreVouluNoir >= 1 and ScoreVouluNoir <= 4 : 
+                                break
+                    return
+                case 2:
+                    while True:
+                        print("Quel score voulez-vous ?")
+                        print("|1: Score absolue : L'IA cherche à avoir plus de pions que vous")
+                        print("|2: Score relatif : L'IA s'aide d'un tableau de poids")
+                        print("|3: Score mobilité : L'IA cherche à limiter vos coups tout en augmentant ses possibilités")
+                        print("|4: Score mixte : L'IA allie ses stratégies")
+                        if Couleur=="B":
+                            ScoreVouluBlanc=int(input("Votre choix :"))
+                            if ScoreVouluBlanc >= 1 and ScoreVouluBlanc <= 4 : 
+                                break
+                        else:
+                            ScoreVouluNoir=int(input("Votre choix :"))
+                            if ScoreVouluNoir >= 1 and ScoreVouluNoir <= 4 : 
+                                break
+                    print("Quel profondeur voulez-vous ? Chaque profondeur joue 2 demi-coups (1 coup allié, 1 coup adverse). Attention, pour MinMax, on conseille un max de 2 !")
+                    if Couleur=="B":
+                        profondeurBlanc=int(input("Votre choix :"))
+                    else:
+                        profondeurNoir=int(input("Votre choix :"))
+                    return
+                case 3:
+                    while True:
+                        print("Quel score voulez-vous ?")
+                        print("|1: Score absolue : L'IA cherche à avoir plus de pions que vous")
+                        print("|2: Score relatif : L'IA s'aide d'un tableau de poids")
+                        print("|3: Score mobilité : L'IA cherche à limiter vos coups tout en augmentant ses possibilités")
+                        print("|4: Score mixte : L'IA allie ses stratégies")
+                        if Couleur=="B":
+                            ScoreVouluBlanc=int(input("Votre choix :"))
+                            if ScoreVouluBlanc >= 1 and ScoreVouluBlanc <= 4 : 
+                                break
+                        else:
+                            ScoreVouluNoir=int(input("Votre choix :"))
+                            if ScoreVouluNoir >= 1 and ScoreVouluNoir <= 4 : 
+                                break
+                    print("Quel profondeur voulez-vous ? Chaque profondeur joue 2 demi-coups (1 coup allié, 1 coup adverse).")
+                    if Couleur=="B":
+                        profondeurBlanc=int(input("Votre choix :"))
+                    else:
+                        profondeurNoir=int(input("Votre choix :"))
+                    return
+                case 4:
+                    print("Quel temps voulez-vous pour le Montecarlo ? On conseille 0.5 ou 1. Merci de mettre un . et pas une virgule ! ")
+                    if Couleur=="B":
+                        tempsMontecarloBlanc=float(input("Votre choix:"))
+                    else:
+                        tempsMontecarloNoir=float(input("Votre choix : "))
+                    return
+                case 5:
+                    return
+                case default:
+                    return
+
+
+
+
+def PlayingOthello(Blanc,Noir):
+    global TourActuel, tempsMontecarlo, WhiteNodesPerDepth, WhiteNumberOfNodes, WhitetimeUsed, WhiteMoves, BlackNumberOfNodes, BlackNodesPerDepth, BlackTimeUsed, BlackMoves
+    WhiteNumberOfNodes=0
+    WhiteNodesPerDepth=[0]*4
+    WhitetimeUsed=0
+    WhiteMoves=0
+    BlackNumberOfNodes=0
+    BlackNodesPerDepth=[0]*4
+    BlackTimeUsed=0
+    BlackMoves=0
+    InitialisePlateau()
+    numeroTour=0
+    print("-------------------------------------")
+    TourActuel=PionNoir
+    while True:
+        numeroTour+=1
+        print("Tour n°"+str(numeroTour) + " : A "+TourActuel  + " de jouer !")
+        affichagePlat(plat)
+        if TourActuel=="B":
+            if Blanc==0:
+                x=int(input("Renseignez la coordonnée de x (Hauteur):"))
+                y=int(input("Renseignez la coordonnée de y (Largeur):"))
+            elif Blanc==1:
+                if IAVouluBlanc==1:
+                    (x,y)=MinMaxV1meilleurCoup(TourActuel,plat,ScoreVouluBlanc)
+                elif IAVouluBlanc==2:
+                    (x,y),_=MinMaxMaximise(TourActuel,plat,profondeurBlanc,ScoreVouluBlanc)
+                elif IAVouluBlanc==3:
+                    (x,y),_=AlphaBetaMax(TourActuel,plat,profondeurBlanc,float("-inf"),float("inf"),ScoreVouluBlanc)
+                elif IAVouluBlanc==4:
+                    (x,y)=MonteCarloMain(TourActuel,plat,tempsMontecarloBlanc)
+                elif IAVouluBlanc==5:
+                    (x,y)=randomPlay(plat,TourActuel)
+        else:
+            if Noir==0:
+                x=int(input("Renseignez la coordonnée de x (Hauteur):"))
+                y=int(input("Renseignez la coordonnée de y (Largeur):"))
+            elif Noir==1:
+                if IAVouluNoir==1:
+                    (x,y)=MinMaxV1meilleurCoup(TourActuel,plat,ScoreVouluNoir)
+                elif IAVouluNoir==2:
+                    (x,y),_=MinMaxMaximise(TourActuel,plat,profondeurNoir,ScoreVouluNoir)
+                elif IAVouluNoir==3:
+                    (x,y),_=AlphaBetaMax(TourActuel,plat,profondeurNoir,float("-inf"),float("inf"),ScoreVouluNoir)
+                elif IAVouluNoir==4:
+                    (x,y)=MonteCarloMain(TourActuel,plat,tempsMontecarloNoir)
+                elif IAVouluNoir==5:
+                    (x,y)=randomPlay(plat,TourActuel)
+        if CoupAutorise(x,y,plat):
+            PosePion(x,y,plat)
+            ChangeTour()
+            if isFinished(plat):
+                print("Fin du jeu ! Baissez les armes !")
+                print("-------------------------------------")
+                affichagePlat(plat)
+                if Blanc==0:
+                    print("-----\n Pour le joueur B :")
+                else:
+                    afficheInfoIA("B")
+                print("-> Score (B) de "+str(nombrePion("B",plat)))
+                if Noir==0:
+                    print("-----\n Pour le joueur N :")
+                else:
+                    afficheInfoIA("N")
+                print("-> Score (N) de "+str(nombrePion("N",plat)))
+                if (nombrePion("B",plat)) > (nombrePion("N",plat)):
+                    print(" \n Le joueur B a gagné ! Félicitations ! \n ")
+                elif (nombrePion("B",plat)) < (nombrePion("N",plat)):
+                    print("\n Le joueur N a gagné ! Félicitations ! \n")
+                else:
+                    print("\n Match nul entre les joueurs ! Bien joué ! \n")
+                return
+        else:
+            print("Le coup n'est pas autorisé suivant les règles de l'Othello !")
+def OthelloGame():
+    print("-------------------------------------")
+    print("Un plateau de 8x8 😦 \n un jeu enflammé 😩 .... \n Bienvenue à l'Othello 😁 ! ")
+    while True:
+        print("-------------------------------------")
+        print("Quel mode voulez-vous ?")
+        print("| 1 : Humain (B) vs Humain (N)")
+        print("| 2 : Humain (B) vs IA (N)")
+        print("| 3 : IA (B) vs Humain (N)")
+        print("| 4 : IA (B) vs IA (N)")
+        print("| Tout autre valeur termine le programme.")
+        valeur=int(input("Votre réponse : "))
+        match valeur:
+            case 1:
+                PlayingOthello(0,0)
+            case 2:
+                demandeInfo("N")
+                PlayingOthello(0,1)
+            case 3:
+                demandeInfo("B")
+                PlayingOthello(1,0)
+            case 4:
+                demandeInfo("B")
+                demandeInfo("N")
+                PlayingOthello(1,1)
+            case default:
+                return
+
 
 
 
@@ -756,5 +961,6 @@ def randomPlay(plateau,joueur):
     return PossibleHit[IndexPlayed][0],PossibleHit[IndexPlayed][1]
 
 #TestFonction()
-getResultat()
+#getResultat()
 
+OthelloGame()

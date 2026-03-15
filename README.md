@@ -1,6 +1,7 @@
 # TP de programmation du jeu d'Othello
 ## Made by : Lavoisier Léandre & Thomas Manche
 ### Students of INSA Hauts-de-France - Project for the class " Fondements de l'IA "
+#### 2025 - 2026
 
 ## Currently available through this code :
 
@@ -10,24 +11,17 @@
 - AlphaBeta (Version améliorée de MinMax, plus rapide, avec élagage)
 - Montecarlo (Analyse des choix avec simulation)
 - Random (Choix totalement aléatoire :D ) 
+- BetterMontecarlo (Analyse des choix avec simulation & Traitement)
 
 
 ### Scores
 - Absolu (Nombre de pion de différence entre l'adversaire et le joueur)
 - Positionnel (Valeur des cases intégrés pour aider l'IA à prendre les bonnes décisions)
-
-
-## What is coming : 
+- Mobilité (Maximise ses déplacements)
+- Mixte (Utilise les 3 types de scores)
 
 ### pythonanalyse.py
 
-- Fonction d'analyse du fichier resultat.txt pour obtenir l'IA la plus performante, la plus dangereuse en début de partie... (Currently made with Gemini ;D )
-
-### New Algorithms and score functions that we would like to implement
-
-- Score qui minimise le nombre de déplacements possibles de l'adversaires, ou maximise le notre
-- Algorithme qui peut apprendre (Fichiers de poids)
-- Algorithme plus performant, capable de s'adapter en fonction du nombre de coup joué (Début de partie : MinMax, puis MonteCarlo par exemple...)
-
+- Fonction d'analyse du fichier resultat.txt pour obtenir l'IA la plus performante, la plus dangereuse en début de partie... (Structure made by hand with dictionary, but stats & development of all stats needed made by Gemini)
 
 

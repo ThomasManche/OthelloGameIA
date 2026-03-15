@@ -1,8 +1,5 @@
-# Utilisation de dictionnaire {"ID":"Valeur associée"} pour associer chaque config à son propre tableau de résultat
-
 # Fonction qui va créer ou mettre à jour l'index cle du dictionnaire dico avec sa victoire win ou son match nul is_nul
 def maj(dico, cle, win, is_nul):
-
     if cle not in dico: dico[cle] = [0, 0, 0]
     dico[cle][2] += 1
     if win: dico[cle][0] += 1
@@ -15,7 +12,6 @@ def analyse_finale_ia():
     f.close()
 
     parties = contenu.split('-----------------------')
-    
 
     stats_ia_brutes = {}    
     stats_heuristiques = {} 
@@ -32,17 +28,16 @@ def analyse_finale_ia():
     ia_noeuds_total = {}    
     ia_temps_total = {}     
     ia_coups_total = {}     
-    ia_matchs_count = {} # Pour la moyenne de noeuds par PARTIE
+    ia_matchs_count = {} 
     ia_depth_details = {} 
     ia_prof_performance = {}
 
     depart = {"N": {"B_win": 0, "N_win": 0, "draw": 0, "total": 0}, 
               "B": {"B_win": 0, "N_win": 0, "draw": 0, "total": 0}}
 
-
     for p in parties:
         lignes = p.strip().split('\n')
-        if len(lignes) < 5: continue
+        if len(lignes) < 6: continue
 
         ia_b = lignes[0].split(' VS ')[0].replace('(B)', '').strip()
         ia_n = lignes[0].split(' VS ')[1].replace('(N)', '').strip()
@@ -53,13 +48,19 @@ def analyse_finale_ia():
         ia_matchs_count[ia_n] = ia_matchs_count.get(ia_n, 0) + 1
 
         sb, sn, pb, pn, qui_commence = 0, 0, "None", "None", ""
-        
-        for idx, l in enumerate(lignes):
+        pre_b, pre_n = "None", "None"
+
+        for l in lignes:
             if "Score du joueur B" in l: sb = int(l.split(':')[-1].strip())
             if "Score du joueur N" in l: sn = int(l.split(':')[-1].strip())
             if "Profondeur Blanc" in l: pb = l.split(':')[-1].strip()
             if "Profondeur Noir" in l: pn = l.split(':')[-1].strip()
             if "commence" in l: qui_commence = l.split(' ')[0].strip()
+
+            # Gestion générale du préprocesseur, Blanc ou Noir
+            if "Preprocessor" in l:
+                if "Blanc" in l: pre_b = l.split(':')[1].strip()
+                if "Noir" in l: pre_n = l.split(':')[1].strip()
             
             if "Temps moyen" in l:
                 curr_ia = ia_b if "Blanc" in l else ia_n
@@ -83,25 +84,12 @@ def analyse_finale_ia():
                 if key not in ia_prof_performance: ia_prof_performance[key] = [0, 0, 0]
                 ia_prof_performance[key][0] += nb_n
 
-            if "NodesPerDepth:" in l:
-                curr_ia = ia_b if "White" in l else ia_n
-                prof_match = pb if "White" in l else pn
-                k = idx + 1
-                while k < len(lignes) and "Profondeur" in lignes[k] and ":" in lignes[k]:
-                    etage = lignes[k].split(':')[0].replace("Profondeur", "").strip()
-                    val = float(lignes[k].split(':')[1].split('(')[0].strip())
-                    if curr_ia not in ia_depth_details: ia_depth_details[curr_ia] = {}
-                    if prof_match not in ia_depth_details[curr_ia]: ia_depth_details[curr_ia][prof_match] = {}
-                    if etage not in ia_depth_details[curr_ia][prof_match]: ia_depth_details[curr_ia][prof_match][etage] = [0, 0]
-                    ia_depth_details[curr_ia][prof_match][etage][0] += val
-                    ia_depth_details[curr_ia][prof_match][etage][1] += 1
-                    k += 1
 
         win_b, win_n, nul = sb > sn, sn > sb, sb == sn
-        # Correction Perfects (Score adverse = 0)
         if win_b and sn == 0: perfects[ia_b] = perfects.get(ia_b, 0) + 1
         if win_n and sb == 0: perfects[ia_n] = perfects.get(ia_n, 0) + 1
 
+        # Mise à jour des stats brutes et heuristiques
         maj(stats_ia_brutes, ia_b, win_b, nul)
         maj(stats_ia_brutes, ia_n, win_n, nul)
         maj(stats_heuristiques, h_b, win_b, nul)
@@ -109,14 +97,14 @@ def analyse_finale_ia():
         
         if ia_b not in ia_heuristiques: ia_heuristiques[ia_b] = {}
         if ia_n not in ia_heuristiques: ia_heuristiques[ia_n] = {}
-        maj(ia_heuristiques[ia_b], h_b, win_b, nul)
-        maj(ia_heuristiques[ia_n], h_n, win_n, nul)
+        maj(ia_heuristiques[ia_b], f"{h_b} | {pre_b}", win_b, nul)
+        maj(ia_heuristiques[ia_n], f"{h_n} | {pre_n}", win_n, nul)
 
         if pb != "None": maj(stats_profondeur, pb, win_b, nul)
         if pn != "None": maj(stats_profondeur, pn, win_n, nul)
         
-        maj(configs, (ia_b, h_b, pb), win_b, nul)
-        maj(configs, (ia_n, h_n, pn), win_n, nul)
+        maj(configs, (ia_b, h_b, pb, pre_b), win_b, nul)
+        maj(configs, (ia_n, h_n, pn, pre_n), win_n, nul)
 
         if ia_b != ia_n:
             for att, defen, vic in [(ia_b, ia_n, win_b), (ia_n, ia_b, win_n)]:
@@ -140,7 +128,6 @@ def analyse_finale_ia():
             if nul: depart[qui_commence]["draw"] += 1
             elif win_b: depart[qui_commence]["B_win"] += 1
             elif win_n: depart[qui_commence]["N_win"] += 1
-
     #Partie ou on va écrire
     out = open('analyse.txt', 'w', encoding='utf-8')
     out.write("==================================================\n")
@@ -172,11 +159,14 @@ def analyse_finale_ia():
         v, n, t = stats_heuristiques[h]
         out.write(f"- {h:25} : {(v+0.5*n)/t*100:5.1f}% de winrate\n")
 
-    out.write("\n4. TOP 5 DES MEILLEURES COMBINAISONS (IA + SCORE + PROF)\n")
+    out.write("\n4. TOP 5 DES MEILLEURES COMBINAISONS (IA + SCORE + PROF/TYPE)\n")
     top_5 = sorted(configs.items(), key=lambda x: (x[1][0]+0.5*x[1][1])/x[1][2], reverse=True)[:5]
     for i, (cfg, res) in enumerate(top_5, 1):
         v, n, t = res
-        out.write(f"{i}. {cfg[0]} ({cfg[1]}, Prof {cfg[2]}) -> {(v+0.5*n)/t*100:.1f}% ({v}V/{t})\n")
+        # Si BetterMontecarlo, afficher le type (préprocesseur) à la place de Prof
+        prof_or_type = cfg[3] if "BetterMontecarlo" in cfg[0] else cfg[2]
+        out.write(f"{i}. {cfg[0]} ({cfg[1]}, {prof_or_type}) -> {(v+0.5*n)/t*100:.1f}% ({v}V/{t})\n")
+
 
     out.write("\n5. DOMINATION ET STATISTIQUES DE PIONS\n")
     for ia in tri_ia:
@@ -227,25 +217,36 @@ def analyse_finale_ia():
     for key in sorted(ia_prof_performance.keys()):
         ia_n, prof_n = key
         n_tot, t_tot, c_tot = ia_prof_performance[key]
-        out.write(f"- {ia_n:15} (Prof {prof_n:4}) : {t_tot/c_tot:.4f}s/coup | {n_tot/c_tot:,.0f} noeuds/coup\n")
+        out.write(f"- {ia_n:15} (Prof {prof_n:4}) : {t_tot/c_tot:.4f}s/coup | {n_tot/c_tot:,.0f} noeuds/parties\n")
 
-    # Section 11 : Classement total exhaustif (Force Absolue)
+    # --- Section 11 Classement total ---
     out.write("\n11. CLASSEMENT TOTAL DES CONFIGURATIONS (DE LA PLUS FORTE A LA PLUS NULLE)\n")
     toutes_configs = sorted(configs.items(), key=lambda x: (x[1][0]+0.5*x[1][1])/x[1][2], reverse=True)
     for i, (cfg, res) in enumerate(toutes_configs, 1):
         v, n, t = res
         wr = (v + 0.5*n) / t * 100
-        out.write(f"{i:2}. {cfg[0]:15} | {cfg[1]:25} | Prof {cfg[2]:4} : {wr:5.1f}% ({v}V/{t})\n")
+        prof_or_type = cfg[3] if "BetterMontecarlo" in cfg[0] else cfg[2]
+        out.write(f"{i:2}. {cfg[0]:25} | {cfg[1]:25} | {prof_or_type:10} : {wr:5.1f}% ({v}V/{t})\n")
 
-    out.write("\n==================================================\n")
-    out.write("             CONCLUSION ET NOTATION\n")
-    out.write("==================================================\n\n")
-    for ia in tri_ia:
-        v, n, t = stats_ia_brutes[ia]
-        wr = (v + 0.5*n) / t
-        out.write(f"- {ia:20} : {(wr*15 + (ecarts[ia]/t/5)*5):4.1f}/20\n")
 
-    out.close()
+    # --- Section 12 : comparaison FSP vs VSP uniquement pour BetterMontecarlo ---
+    out.write("\n12. COMPARAISON DES PREPROCESSORS (FSP vs VSP)\n")
+    for ia in ia_heuristiques:
+        if "BetterMontecarlo" not in ia:  # ne traiter que BetterMontecarlo
+            continue
+        fsp_stats = [0, 0, 0]
+        vsp_stats = [0, 0, 0]
+        for key in ia_heuristiques[ia]:
+            if "FSP" in key: 
+                fsp_stats = ia_heuristiques[ia][key]
+            if "VSP" in key: 
+                vsp_stats = ia_heuristiques[ia][key]
+        fsp_wr = (fsp_stats[0] + 0.5*fsp_stats[1]) / (fsp_stats[2] if fsp_stats[2]>0 else 1) * 100
+        vsp_wr = (vsp_stats[0] + 0.5*vsp_stats[1]) / (vsp_stats[2] if vsp_stats[2]>0 else 1) * 100
+        meilleur = "FSP" if fsp_wr > vsp_wr else "VSP" if vsp_wr > fsp_wr else "Egalité"
+        out.write(f"- {ia:25} : FSP WR={fsp_wr:.1f}%, VSP WR={vsp_wr:.1f}% -> Meilleur: {meilleur}\n")
+        out.close()
+
     print("Analyse complète et classement total générés.")
 
 analyse_finale_ia()

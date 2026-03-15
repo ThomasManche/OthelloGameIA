@@ -3,201 +3,85 @@
 ==================================================
 
 1. PERFORMANCE BRUTE DES ALGORITHMES
-- AlphaBeta            :  58.3% WR | 877V, 38N sur 1536
-    > Noeuds/partie: 140,754 | Noeuds/coup: 140,754
-    > Temps moy: 0.2879s | Débit: 488,911 n/s
-- MinMaxMaximise       :  55.9% WR | 561V, 22N sur 1024
-    > Noeuds/partie: 114,352 | Noeuds/coup: 114,352
-    > Temps moy: 0.2821s | Débit: 405,296 n/s
-- Montecarlo           :  49.6% WR | 246V, 16N sur 512
-    > Noeuds/partie: 12,511 | Noeuds/coup: 12,511
-    > Temps moy: 0.5159s | Débit: 24,252 n/s
-- MinMaxV1MeilleurCoup :  44.2% WR | 223V, 7N sur 512
-    > Noeuds/partie: 235 | Noeuds/coup: 235
-    > Temps moy: 0.0061s | Débit: 38,374 n/s
-- Random               :  19.4% WR | 95V, 9N sur 512
-    > Noeuds/partie: 29 | Noeuds/coup: 29
-    > Temps moy: 0.0001s | Débit: 326,779 n/s
+- Montecarlo           :  51.2% WR | 62V, 7N sur 128
+    > Noeuds/partie: 22,530 | Noeuds/coup: 22,530
+    > Temps moy: 0.5292s | Débit: 42,575 n/s
+- BetterMontecarlo     :  48.8% WR | 59V, 7N sur 128
+    > Noeuds/partie: 15,185 | Noeuds/coup: 15,185
+    > Temps moy: 0.5320s | Débit: 28,543 n/s
 
 2. IMPACT REEL DE LA PROFONDEUR
-- Profondeur 1 :  53.6% de réussite globale
-- Profondeur 2 :  58.7% de réussite globale
-- Profondeur 3 :  62.0% de réussite globale
 
 3. ANALYSE DES HEURISTIQUES (GLOBAL)
-- Poids des cases           :  62.6% de winrate
-- Mixte                     :  51.8% de winrate
-- scoreMobilite             :  50.7% de winrate
-- Nombre de pions relatifs  :  34.8% de winrate
+- Poids des cases           :  59.4% de winrate
+- scoreMobilite             :  50.8% de winrate
+- Nombre de pions relatifs  :  47.7% de winrate
+- Mixte                     :  42.2% de winrate
 
-4. TOP 5 DES MEILLEURES COMBINAISONS (IA + SCORE + PROF)
-1. AlphaBeta (Poids des cases, Prof 3) -> 82.0% (104V/128)
-2. AlphaBeta (Poids des cases, Prof 1) -> 80.9% (102V/128)
-3. MinMaxMaximise (Poids des cases, Prof 1) -> 74.6% (95V/128)
-4. AlphaBeta (Poids des cases, Prof 2) -> 72.7% (91V/128)
-5. MinMaxMaximise (Poids des cases, Prof 2) -> 71.1% (90V/128)
+4. TOP 5 DES MEILLEURES COMBINAISONS (IA + SCORE + PROF/TYPE)
+1. BetterMontecarlo (Poids des cases, VSP(Coup au dessus seuil, PS=0.7)) -> 81.2% (13V/16)
+2. Montecarlo (Poids des cases, None) -> 56.2% (17V/32)
+3. BetterMontecarlo (scoreMobilite, FSP(Meilleurs coups fixes, NS=4)) -> 56.2% (8V/16)
+4. Montecarlo (Nombre de pions relatifs, None) -> 54.7% (17V/32)
+5. BetterMontecarlo (scoreMobilite, VSP(Coup au dessus seuil, PS=0.7)) -> 53.1% (8V/16)
 
 5. DOMINATION ET STATISTIQUES DE PIONS
-- AlphaBeta            : Ecart global +4.5
-    > Moy. en Victoire: +25.0 | Moy. en Défaite: -24.1
-    > Pions moy: 34.2 | Perfects: 30
-- MinMaxMaximise       : Ecart global +2.2
-    > Moy. en Victoire: +23.6 | Moy. en Défaite: -24.8
-    > Pions moy: 33.1 | Perfects: 24
-- Montecarlo           : Ecart global +1.9
-    > Moy. en Victoire: +25.0 | Moy. en Défaite: -20.8
-    > Pions moy: 32.9 | Perfects: 1
-- MinMaxV1MeilleurCoup : Ecart global -2.3
-    > Moy. en Victoire: +22.8 | Moy. en Défaite: -22.1
-    > Pions moy: 30.8 | Perfects: 16
-- Random               : Ecart global -17.6
-    > Moy. en Victoire: +14.5 | Moy. en Défaite: -25.5
-    > Pions moy: 23.2 | Perfects: 0
+- Montecarlo           : Ecart global -1.6
+    > Moy. en Victoire: +19.3 | Moy. en Défaite: -23.8
+    > Pions moy: 31.2 | Perfects: 0
+- BetterMontecarlo     : Ecart global +1.6
+    > Moy. en Victoire: +23.8 | Moy. en Défaite: -19.3
+    > Pions moy: 32.8 | Perfects: 0
 
 6. CLASSEMENT DES CONFRONTATIONS (MATRICE NEMESIS)
-- AlphaBeta            :
-    > vs Random               :  88.3% WR (168V/192)
-    > vs MinMaxV1MeilleurCoup :  62.2% WR (117V/192)
-    > vs Montecarlo           :  57.6% WR (107V/192)
-    > vs MinMaxMaximise       :  54.3% WR (205V/384)
-- MinMaxMaximise       :
-    > vs Random               :  81.6% WR (103V/128)
-    > vs MinMaxV1MeilleurCoup :  66.4% WR (85V/128)
-    > vs Montecarlo           :  61.7% WR (77V/128)
-    > vs AlphaBeta            :  45.7% WR (172V/384)
 - Montecarlo           :
-    > vs Random               :  86.7% WR (55V/64)
-    > vs MinMaxV1MeilleurCoup :  56.2% WR (35V/64)
-    > vs AlphaBeta            :  42.4% WR (78V/192)
-    > vs MinMaxMaximise       :  38.3% WR (47V/128)
-- MinMaxV1MeilleurCoup :
-    > vs Random               :  79.7% WR (51V/64)
-    > vs Montecarlo           :  43.8% WR (27V/64)
-    > vs AlphaBeta            :  37.8% WR (70V/192)
-    > vs MinMaxMaximise       :  33.6% WR (43V/128)
-- Random               :
-    > vs MinMaxV1MeilleurCoup :  20.3% WR (13V/64)
-    > vs MinMaxMaximise       :  18.4% WR (22V/128)
-    > vs Montecarlo           :  13.3% WR (8V/64)
-    > vs AlphaBeta            :  11.7% WR (21V/192)
+    > vs BetterMontecarlo     :  51.2% WR (62V/128)
+- BetterMontecarlo     :
+    > vs Montecarlo           :  48.8% WR (59V/128)
 
 7. PERFORMANCE DES HEURISTIQUES PAR ALGORITHME
-- AlphaBeta:
-    > Mixte                     :  60.2% WR (226V/384)
-    > Nombre de pions relatifs  :  37.0% WR (137V/384)
-    > Poids des cases           :  78.5% WR (297V/384)
-    > scoreMobilite             :  57.7% WR (217V/384)
-- MinMaxMaximise:
-    > Mixte                     :  55.9% WR (140V/256)
-    > Nombre de pions relatifs  :  33.2% WR (81V/256)
-    > Poids des cases           :  72.9% WR (185V/256)
-    > scoreMobilite             :  61.5% WR (155V/256)
 - Montecarlo:
-    > Mixte                     :  51.2% WR (63V/128)
-    > Nombre de pions relatifs  :  50.4% WR (63V/128)
-    > Poids des cases           :  50.4% WR (63V/128)
-    > scoreMobilite             :  46.5% WR (57V/128)
-- MinMaxV1MeilleurCoup:
-    > Mixte                     :  50.4% WR (64V/128)
-    > Nombre de pions relatifs  :  30.9% WR (39V/128)
-    > Poids des cases           :  52.0% WR (65V/128)
-    > scoreMobilite             :  43.8% WR (55V/128)
-- Random:
-    > Mixte                     :  20.7% WR (25V/128)
-    > Nombre de pions relatifs  :  19.9% WR (24V/128)
-    > Poids des cases           :  17.6% WR (21V/128)
-    > scoreMobilite             :  19.5% WR (25V/128)
+    > Mixte | None              :  46.9% WR (14V/32)
+    > Nombre de pions relatifs | None :  54.7% WR (17V/32)
+    > Poids des cases | None    :  56.2% WR (17V/32)
+    > scoreMobilite | None      :  46.9% WR (14V/32)
+- BetterMontecarlo:
+    > Mixte | FSP(Meilleurs coups fixes, NS=4) :  37.5% WR (5V/16)
+    > Mixte | VSP(Coup au dessus seuil, PS=0.7) :  37.5% WR (6V/16)
+    > Nombre de pions relatifs | FSP(Meilleurs coups fixes, NS=4) :  37.5% WR (5V/16)
+    > Nombre de pions relatifs | VSP(Coup au dessus seuil, PS=0.7) :  43.8% WR (7V/16)
+    > Poids des cases | FSP(Meilleurs coups fixes, NS=4) :  43.8% WR (7V/16)
+    > Poids des cases | VSP(Coup au dessus seuil, PS=0.7) :  81.2% WR (13V/16)
+    > scoreMobilite | FSP(Meilleurs coups fixes, NS=4) :  56.2% WR (8V/16)
+    > scoreMobilite | VSP(Coup au dessus seuil, PS=0.7) :  53.1% WR (8V/16)
 
 8. ANALYSE DU TOUR DE DEPART
-Matchs commençant par N (1024 parties) :
-  > Victoires Noirs (N) : 46.4%
-  > Victoires Blancs (B) : 51.2%
-Matchs commençant par B (1024 parties) :
-  > Victoires Noirs (N) : 50.5%
-  > Victoires Blancs (B) : 47.5%
+Matchs commençant par N (64 parties) :
+  > Victoires Noirs (N) : 45.3%
+  > Victoires Blancs (B) : 48.4%
+Matchs commençant par B (64 parties) :
+  > Victoires Noirs (N) : 51.6%
+  > Victoires Blancs (B) : 43.8%
 
 9. RÉPARTITION TECHNIQUE PAR ÉTAGE DE PROFONDEUR
-- AlphaBeta:
-    [Config Profondeur 1]
-      > Niveau 0 : 36.6 noeuds générés en moyenne
-      > Niveau 1 : 35.9 noeuds générés en moyenne
-    [Config Profondeur 2]
-      > Niveau 0 : 197.3 noeuds générés en moyenne
-      > Niveau 1 : 395.2 noeuds générés en moyenne
-      > Niveau 2 : 520.5 noeuds générés en moyenne
-    [Config Profondeur 3]
-      > Niveau 0 : 3,762.9 noeuds générés en moyenne
-      > Niveau 1 : 1,671.9 noeuds générés en moyenne
-      > Niveau 2 : 5,341.8 noeuds générés en moyenne
-      > Niveau 3 : 8,833.0 noeuds générés en moyenne
-- MinMaxMaximise:
-    [Config Profondeur 1]
-      > Niveau 0 : 78.5 noeuds générés en moyenne
-      > Niveau 1 : 79.3 noeuds générés en moyenne
-    [Config Profondeur 2]
-      > Niveau 0 : 737.1 noeuds générés en moyenne
-      > Niveau 1 : 4,282.6 noeuds générés en moyenne
-      > Niveau 2 : 6,833.0 noeuds générés en moyenne
-- Montecarlo:
-    [Config Profondeur None]
-      > Niveau 1 : 0.0 noeuds générés en moyenne
-- MinMaxV1MeilleurCoup:
-    [Config Profondeur None]
-      > Niveau 1 : 0.0 noeuds générés en moyenne
-- Random:
-    [Config Profondeur None]
-      > Niveau 1 : 0.0 noeuds générés en moyenne
 
 10. ANALYSE CROISÉE IA / PROFONDEUR (EFFORT DE CALCUL)
-- AlphaBeta       (Prof 1   ) : 0.0024s/coup | 1,076 noeuds/coup
-- AlphaBeta       (Prof 2   ) : 0.0475s/coup | 21,521 noeuds/coup
-- AlphaBeta       (Prof 3   ) : 0.8137s/coup | 399,666 noeuds/coup
-- MinMaxMaximise  (Prof 1   ) : 0.0056s/coup | 2,338 noeuds/coup
-- MinMaxMaximise  (Prof 2   ) : 0.5586s/coup | 226,365 noeuds/coup
-- MinMaxV1MeilleurCoup (Prof None) : 0.0061s/coup | 235 noeuds/coup
-- Montecarlo      (Prof None) : 0.5159s/coup | 12,511 noeuds/coup
-- Random          (Prof None) : 0.0001s/coup | 29 noeuds/coup
+- BetterMontecarlo (Prof None) : 0.5320s/coup | 15,185 noeuds/parties
+- Montecarlo      (Prof None) : 0.5292s/coup | 22,530 noeuds/parties
 
 11. CLASSEMENT TOTAL DES CONFIGURATIONS (DE LA PLUS FORTE A LA PLUS NULLE)
- 1. AlphaBeta       | Poids des cases           | Prof 3    :  82.0% (104V/128)
- 2. AlphaBeta       | Poids des cases           | Prof 1    :  80.9% (102V/128)
- 3. MinMaxMaximise  | Poids des cases           | Prof 1    :  74.6% (95V/128)
- 4. AlphaBeta       | Poids des cases           | Prof 2    :  72.7% (91V/128)
- 5. MinMaxMaximise  | Poids des cases           | Prof 2    :  71.1% (90V/128)
- 6. AlphaBeta       | Mixte                     | Prof 3    :  68.0% (86V/128)
- 7. AlphaBeta       | Mixte                     | Prof 2    :  66.0% (83V/128)
- 8. MinMaxMaximise  | Mixte                     | Prof 2    :  64.1% (81V/128)
- 9. MinMaxMaximise  | scoreMobilite             | Prof 2    :  63.3% (80V/128)
-10. AlphaBeta       | scoreMobilite             | Prof 3    :  61.7% (76V/128)
-11. AlphaBeta       | scoreMobilite             | Prof 2    :  61.3% (78V/128)
-12. MinMaxMaximise  | scoreMobilite             | Prof 1    :  59.8% (75V/128)
-13. MinMaxV1MeilleurCoup | Poids des cases           | Prof None :  52.0% (65V/128)
-14. Montecarlo      | Mixte                     | Prof None :  51.2% (63V/128)
-15. MinMaxV1MeilleurCoup | Mixte                     | Prof None :  50.4% (64V/128)
-16. Montecarlo      | Nombre de pions relatifs  | Prof None :  50.4% (63V/128)
-17. Montecarlo      | Poids des cases           | Prof None :  50.4% (63V/128)
-18. AlphaBeta       | scoreMobilite             | Prof 1    :  50.0% (63V/128)
-19. MinMaxMaximise  | Mixte                     | Prof 1    :  47.7% (59V/128)
-20. AlphaBeta       | Mixte                     | Prof 1    :  46.5% (57V/128)
-21. Montecarlo      | scoreMobilite             | Prof None :  46.5% (57V/128)
-22. MinMaxV1MeilleurCoup | scoreMobilite             | Prof None :  43.8% (55V/128)
-23. AlphaBeta       | Nombre de pions relatifs  | Prof 1    :  37.5% (47V/128)
-24. AlphaBeta       | Nombre de pions relatifs  | Prof 2    :  37.1% (45V/128)
-25. AlphaBeta       | Nombre de pions relatifs  | Prof 3    :  36.3% (45V/128)
-26. MinMaxMaximise  | Nombre de pions relatifs  | Prof 2    :  34.4% (41V/128)
-27. MinMaxMaximise  | Nombre de pions relatifs  | Prof 1    :  32.0% (40V/128)
-28. MinMaxV1MeilleurCoup | Nombre de pions relatifs  | Prof None :  30.9% (39V/128)
-29. Random          | Mixte                     | Prof None :  20.7% (25V/128)
-30. Random          | Nombre de pions relatifs  | Prof None :  19.9% (24V/128)
-31. Random          | scoreMobilite             | Prof None :  19.5% (25V/128)
-32. Random          | Poids des cases           | Prof None :  17.6% (21V/128)
+ 1. BetterMontecarlo          | Poids des cases           | VSP(Coup au dessus seuil, PS=0.7) :  81.2% (13V/16)
+ 2. Montecarlo                | Poids des cases           | None       :  56.2% (17V/32)
+ 3. BetterMontecarlo          | scoreMobilite             | FSP(Meilleurs coups fixes, NS=4) :  56.2% (8V/16)
+ 4. Montecarlo                | Nombre de pions relatifs  | None       :  54.7% (17V/32)
+ 5. BetterMontecarlo          | scoreMobilite             | VSP(Coup au dessus seuil, PS=0.7) :  53.1% (8V/16)
+ 6. Montecarlo                | scoreMobilite             | None       :  46.9% (14V/32)
+ 7. Montecarlo                | Mixte                     | None       :  46.9% (14V/32)
+ 8. BetterMontecarlo          | Nombre de pions relatifs  | VSP(Coup au dessus seuil, PS=0.7) :  43.8% (7V/16)
+ 9. BetterMontecarlo          | Poids des cases           | FSP(Meilleurs coups fixes, NS=4) :  43.8% (7V/16)
+10. BetterMontecarlo          | Nombre de pions relatifs  | FSP(Meilleurs coups fixes, NS=4) :  37.5% (5V/16)
+11. BetterMontecarlo          | Mixte                     | FSP(Meilleurs coups fixes, NS=4) :  37.5% (5V/16)
+12. BetterMontecarlo          | Mixte                     | VSP(Coup au dessus seuil, PS=0.7) :  37.5% (6V/16)
 
-==================================================
-             CONCLUSION ET NOTATION
-==================================================
-
-- AlphaBeta            : 13.3/20
-- MinMaxMaximise       : 10.6/20
-- Montecarlo           :  9.3/20
-- MinMaxV1MeilleurCoup :  4.4/20
-- Random               : -14.7/20
+12. COMPARAISON DES PREPROCESSORS (FSP vs VSP)
+- BetterMontecarlo          : FSP WR=37.5%, VSP WR=37.5% -> Meilleur: Egalité

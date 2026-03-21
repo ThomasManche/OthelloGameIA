@@ -765,7 +765,9 @@ Cherche à maximiser son score tout en minimisant le score de l'adversaire.
 Il est implémenté en deux fonctions : MinMaxMaximise et MinMaxMinimise, qui s'appellent récursivement.
 """
 def MinMaxMinimise(joueur, plateau,profondeur,versionScore):
+    #fonction recursive representant le choix de l'adversaire du joueur pour minimiser le score de l'algorithme
     global WhiteNumberOfNodes, WhiteNodesPerDepth, BlackNumberOfNodes, BlackNodesPerDepth
+    #mise a jour du nombre de noeud pour le joueur 
     if joueur==PionBlanc:
         WhiteNumberOfNodes+=1
         WhiteNodesPerDepth[profondeur-1]+=1
@@ -776,25 +778,40 @@ def MinMaxMinimise(joueur, plateau,profondeur,versionScore):
     scoreTemp = 0
     scoreMeilleur = float("inf")
     coupPossible = False
+    #parcours du  plateau de jeu pour 
     for i in range ( 0, len(platTemp)):
         for j in range ( 0, len(platTemp[i])):
+            #s'arrete a chaque coup autorise 
             if CoupAutorise(i,j,platTemp,PionBlanc if joueur==PionNoir else PionNoir):
                 coupPossible=True
+                #calcul du score du joueur si le pion est posé 
                 PosePion(i,j,platTemp,PionBlanc if joueur==PionNoir else PionNoir) 
                 _,scoreTemp = MinMaxMaximise(joueur , platTemp, profondeur-1,versionScore) 
+                #Supposition : le coup entraînant le plus bas score au joueur est retenu par l'adversaire 
                 if scoreTemp < scoreMeilleur:
                     scoreMeilleur = scoreTemp
                 platTemp = copy.deepcopy(plateau)
-    if coupPossible==False:
-        if versionScore == 1:
+                
+    if coupPossible==False: #si l'adversaire n'a plus de coup possible , le calcul et retour du score du joueur sont effectues
+        if versionScore == 1: #version 1 de calcul de score , le nombre de pion 
             return score(joueur, plateau)
-        else:
-            return scorePoidsCase(joueur, plateau)
+        elif versionScore==2:
+            return bestCoup,scorePoidsCase(joueur,plateau)
+        elif versionScore==3:
+            return bestCoup,scoreMobilite(joueur,plateau)
+        elif versionScore==4:
+            return bestCoup, scoreMixte(joueur,plateau)
+            
     return scoreMeilleur    
                 
 def MinMaxMaximise(joueur, plateau,profondeur, versionScore=1 ):
+    #fonction recursive , representant le choix de l'algorithme pour maximiser son score 
+    # il pars egalement de la supposition que l'adversaire prendra le choix de minimiser le score de l'algorithme 
+    #la fonction appelle MinMaxMinimise pour représenter le choix de l'adversaire. 
+    #La fonction MinMaxMimise appelle ensuite MinMaxMaximise. 
+    #La recursivite continue jusqu'à ce que la profondeur tombe à zero 
     global WhiteNumberOfNodes, WhiteNodesPerDepth, BlackNumberOfNodes, BlackNodesPerDepth
-    if joueur==PionBlanc:
+    if joueur==PionBlanc: #mise a jour du nombre de noeud genere
         WhiteNumberOfNodes+=1
         WhiteNodesPerDepth[profondeur-1]+=1
     else:
@@ -804,7 +821,7 @@ def MinMaxMaximise(joueur, plateau,profondeur, versionScore=1 ):
     bestCoup = None
     scoreTemp = 0
     bestscore = float("-inf")
-    if profondeur==0:
+    if profondeur==0:#si la profondeur est a zero , la fin de la branche est atteint 8
         if versionScore==1:
             return bestCoup,score(joueur,plateau)
         elif versionScore==2:
@@ -813,13 +830,13 @@ def MinMaxMaximise(joueur, plateau,profondeur, versionScore=1 ):
             return bestCoup,scoreMobilite(joueur,plateau)
         elif versionScore==4:
             return bestCoup, scoreMixte(joueur,plateau)
-    for i in range ( 0, len(plateau)):
+    for i in range ( 0, len(plateau)):#parcours du plateau
         for j in range ( 0, len(plateau[i])):
-            if CoupAutorise(i,j,plateau):
+            if CoupAutorise(i,j,plateau): #creation d'un nouveau neud a chaque coup autorise 
                 plateauTemp=copy.deepcopy(plateau)
                 PosePion(i,j,plateauTemp) 
                 scoreTemp =  MinMaxMinimise(joueur, plateauTemp, profondeur, versionScore)
-                if scoreTemp >= bestscore:
+                if scoreTemp >= bestscore:# on garde le coup dont le resultat de la branche est le plus gros 
                     bestscore = scoreTemp
                     bestCoup = (i,j)
         
@@ -835,19 +852,20 @@ Permet d'atteindre des profondeurs plus importantes que MinMax, tout en gardant 
 """
 
 def AlphaBetaMax(joueur, plateau, profondeur, alpha, beta,versionScore=1):
+    # Cette fonction doit retourner le meilleur coup pour le joueur donné PionNoir ou PionBlanc
+    #utilise les algorithmes de minimax avec élagage alpha-beta pour déterminer le meilleur coup pour le joueur donné PionNoir ou PionBlanc
     global WhiteNumberOfNodes, WhiteNodesPerDepth, BlackNumberOfNodes, BlackNodesPerDepth
-    if joueur==PionBlanc:
+    if joueur==PionBlanc:#mise ajour du nombre de noeux 
         WhiteNumberOfNodes+=1
         WhiteNodesPerDepth[profondeur-1]+=1
     else:
         BlackNodesPerDepth[profondeur-1]+=1
         BlackNumberOfNodes+=1
-    # Cette fonction doit retourner le meilleur coup pour le joueur donné PionNoir ou PionBlanc
-    #utilise les algorithmes de minimax avec élagage alpha-beta pour déterminer le meilleur coup pour le joueur donné PionNoir ou PionBlanc
+
     plateauTemp = None
     bestCoup = (None,None)
     v = 0
-    if profondeur==0:
+    if profondeur==0:# Rencontre avec la fin de la branche 
         #choix du score/strategie de recherche à utiliser pour évaluer le plateau à la profondeur 0
         if versionScore==1:
             return bestCoup,score(joueur,plateau)
@@ -857,23 +875,26 @@ def AlphaBetaMax(joueur, plateau, profondeur, alpha, beta,versionScore=1):
             return bestCoup,scoreMobilite(joueur,plateau)
         elif versionScore==4:
             return bestCoup, scoreMixte(joueur,plateau)
-    for i in range ( 0, len(plateau)):
+            
+    for i in range ( 0, len(plateau)): #parcours des coups possibles 
         for j in range ( 0, len(plateau[i])):
             if CoupAutorise(i,j,plateau, joueur):
                 #print("Coup autorisé pour i:"+str(i) + "et j : "+ str(j))
                 plateauTemp=copy.deepcopy(plateau)
                 PosePion(i,j,plateauTemp, joueur) # fonction plaçant le pion du joueur sur le plateau temporaire
-                _, v =  AlphaBetaMin(joueur, plateauTemp, profondeur, alpha, beta, versionScore)
+                _, v =  AlphaBetaMin(joueur, plateauTemp, profondeur, alpha, beta, versionScore) #creation d'un nouveau noeud  
                 if bestCoup==(None,None):
                     bestCoup=(i,j)
-                if v > alpha :
+                if v > alpha : #si le noeud du coup retourne un meilleurs resultat que le best coup actuel , le best coup change 
                     alpha = v
                     bestCoup = (i,j)
-                if alpha >= beta:
+                if alpha >= beta: #elagage de la branche 
                     return bestCoup, alpha
     return bestCoup, alpha
     
 def AlphaBetaMin(joueur, plateau, profondeur, alpha, beta, versionScore=1): 
+    #cette fonction represente le choix que fait l'adversaire pendant son tour 
+    #la supposition que l'adversaire prendra toujours le coup possible avec le pire score pour l'algorihtme est faite 
     global WhiteNumberOfNodes, WhiteNodesPerDepth, BlackNumberOfNodes, BlackNodesPerDepth
     if joueur==PionBlanc:
         WhiteNumberOfNodes+=1
@@ -886,7 +907,7 @@ def AlphaBetaMin(joueur, plateau, profondeur, alpha, beta, versionScore=1):
     plateauTemp = None
     bestCoup = (None,None)
     v = 0
-    for i in range ( 0, len(plateau)):
+    for i in range ( 0, len(plateau)): #parcours des coups possibles 
         for j in range ( 0, len(plateau[i])):
             if CoupAutorise(i,j,plateau,PionBlanc if joueur==PionNoir else PionNoir):
                 #print("Coup autorisé pour i:"+str(i) + "et j : "+ str(j))
@@ -895,10 +916,10 @@ def AlphaBetaMin(joueur, plateau, profondeur, alpha, beta, versionScore=1):
                 _, v =  AlphaBetaMax(joueur, plateauTemp, profondeur-1, alpha, beta, versionScore)
                 if bestCoup==(None,None):
                     bestCoup=(i,j)
-                if v < beta :
+                if v < beta :  #si le noeud du coup retourne un meilleurs resultat que le best coup actuel , le best coup change 
                     beta = v
                     bestCoup = (i,j)
-                if alpha >= beta:
+                if alpha >= beta:  #elagage de la branche 
                     return bestCoup, beta
     return bestCoup, beta
 
